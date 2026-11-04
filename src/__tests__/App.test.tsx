@@ -179,7 +179,7 @@ vi.mock('../odontogram', () => ({
   setImportFormat: vi.fn(),
   getChartMode: vi.fn().mockReturnValue('status'),
   setChartMode: vi.fn(),
-  getStatusChart: vi.fn().mockReturnValue({}),
+  getStatusChart: vi.fn().mockReturnValue({ teeth: {} }),
   getPlanChart: vi.fn().mockReturnValue({}),
   setPlanChart: vi.fn(),
   getPlanChanges: vi.fn().mockReturnValue([]),
@@ -218,37 +218,18 @@ describe('App.tsx', () => {
       expect(grid).toBeInTheDocument();
     });
 
-    it('renders the panel with control sections', () => {
+    it('omits Tooth Information and logs tooth state as JSON', () => {
+      const consoleInfo = vi.spyOn(console, 'info').mockImplementation(() => {});
       render(<App />);
-      const statusCard = document.getElementById('statusCard');
-      expect(statusCard).toBeInTheDocument();
+      expect(document.querySelector('.tooth-info')).not.toBeInTheDocument();
+      expect(consoleInfo).toHaveBeenCalledWith('Odontogram tooth state (JSON):', '{}');
+      consoleInfo.mockRestore();
     });
 
-    // SP3b Task 6: crown-leakage toggle row. `wireControls`/`syncControlsFromState`
-    // (odontogram.ts, mocked out here) own the actual show/hide + state-write
-    // behavior — see src/__tests__/crown-leakage.test.ts and warnings.test.ts for
-    // that. This only pins down that the row + checkbox exist in the DOM and
-    // start hidden (matching every other conditionally-shown row, e.g. calculusRow).
-    it('renders the crown-leakage toggle row, hidden by default', () => {
+    it('omits the built-in tooth controls panel', () => {
       render(<App />);
-      const row = document.getElementById('crownLeakageRow');
-      const checkbox = document.getElementById('crownLeakage');
-      expect(row).toBeInTheDocument();
-      expect(checkbox).toBeInTheDocument();
-      expect(checkbox).toHaveAttribute('type', 'checkbox');
-      expect(row).toHaveClass('hidden');
-    });
-
-    // SP5 Task 5: the per-tooth root-caries picker lives in the caries card.
-    // (initOdontogram is mocked, so the <select> renders empty; this pins the
-    // row + select markup, mirroring the crown-leakage row test above.)
-    it('renders the root-caries picker row inside the caries card', () => {
-      render(<App />);
-      const row = document.getElementById('rootCariesRow');
-      const select = document.getElementById('rootCariesSelect');
-      expect(row).toBeInTheDocument();
-      expect(select).toBeInTheDocument();
-      expect(select?.tagName).toBe('SELECT');
+      expect(document.querySelector('.panel-odontogram-controls')).not.toBeInTheDocument();
+      expect(document.getElementById('statusCard')).not.toBeInTheDocument();
     });
 
     it('renders chart action buttons', () => {
@@ -452,54 +433,4 @@ describe('App.tsx', () => {
     });
   });
 
-  describe('selection actions', () => {
-    it('renders all selection action buttons', () => {
-      render(<App />);
-      expect(document.getElementById('btnSelectAll')).toBeInTheDocument();
-      expect(document.getElementById('btnSelectNone')).toBeInTheDocument();
-      expect(document.getElementById('btnSelectUpper')).toBeInTheDocument();
-      expect(document.getElementById('btnSelectLower')).toBeInTheDocument();
-    });
-
-    it('renders status action buttons', () => {
-      render(<App />);
-      expect(document.getElementById('btnResetAll')).toBeInTheDocument();
-      expect(document.getElementById('btnPrimaryDentition')).toBeInTheDocument();
-      expect(document.getElementById('btnMixedDentition')).toBeInTheDocument();
-      expect(document.getElementById('btnEdentulous')).toBeInTheDocument();
-    });
-  });
-
-  describe('tooth control sections', () => {
-    it('renders tooth select dropdown', () => {
-      render(<App />);
-      expect(document.getElementById('toothSelect')).toBeInTheDocument();
-    });
-
-    it('renders restoration + substrate select dropdowns', () => {
-      render(<App />);
-      expect(document.getElementById('restorationSelect')).toBeInTheDocument();
-      expect(document.getElementById('substrateSelect')).toBeInTheDocument();
-    });
-
-    // SP7 Task 4: #endoSelect/#pulpSelect were merged into one #pulpEndoSelect
-    // (two optgroups, populated dynamically by odontogram.ts — mocked out here,
-    // see sp7-pulp-endo-select.test.ts for the populated/behavioral coverage).
-    it('renders the merged pulp/endo select dropdown, not the old separate ones', () => {
-      render(<App />);
-      expect(document.getElementById('pulpEndoSelect')).toBeInTheDocument();
-      expect(document.getElementById('endoSelect')).not.toBeInTheDocument();
-      expect(document.getElementById('pulpSelect')).not.toBeInTheDocument();
-    });
-
-    it('renders filling select dropdown', () => {
-      render(<App />);
-      expect(document.getElementById('fillingSelect')).toBeInTheDocument();
-    });
-
-    it('renders mobility select dropdown', () => {
-      render(<App />);
-      expect(document.getElementById('mobilitySelect')).toBeInTheDocument();
-    });
-  });
 });

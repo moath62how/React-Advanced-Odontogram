@@ -295,7 +295,7 @@ export type OdontogramProviderProps = {
   selectionColor?: string;
   /** Selection-ring border style; same contract as {@link screenToothSpacing}. */
   selectionBorderStyle?: SelectionBorderStyle;
-  /** Whether the tooth-information panel is shown; same contract as {@link screenToothSpacing}. */
+  /** Whether the optional Tooth Information surface is shown. */
   toothInfo?: boolean;
   /** The composed UI (surfaces + shell layout). */
   children?: ReactNode;
@@ -333,7 +333,6 @@ export type OdontogramUiContextValue = {
   exportPdfOn: boolean;
   importStatusOn: boolean;
   importFhirOn: boolean;
-  // Tooth-information panel.
   summary: OdontogramSummary | null;
   toothInfoOn: boolean;
   // Chart styling (shared between the chart surface and the Settings modal).
@@ -464,7 +463,6 @@ function OdontogramProviderInner({
   const [wearLevel, setWearLevel] = useState<ToothDetailLevel>(wearDetailLevel ?? "complex");
   const [discoLevel, setDiscoLevel] = useState<ToothDetailLevel>(discolorationDetailLevel ?? "complex");
   const [notation, setNotation] = useState<SurfaceNotation>(surfaceNotation ?? "full");
-  const [toothInfoOn, setToothInfoOn] = useState<boolean>(() => getToothInfoVisible());
   // Per-format export + per-source import availability (session-only UI config).
   // All default ON. A disabled format/source hides its export/import menu item;
   // disabling PDF also disables the Export Settings tab.
@@ -483,6 +481,8 @@ function OdontogramProviderInner({
   const [screenNumberSize, setScreenNumberSize] = useState<ScreenToothNumberSize>(() => getScreenToothNumberSize());
   const [selectionColor, setSelectionColorState] = useState<string>(() => getSelectionColor());
   const [selectionBorderStyle, setSelectionBorderStyleState] = useState<SelectionBorderStyle>(() => getSelectionBorderStyle());
+  const [toothInfoOn, setToothInfoOn] = useState<boolean>(() => getToothInfoVisible());
+  const [summary, setSummary] = useState<OdontogramSummary | null>(null);
   // Fillings-tab config (mirrors odontogram.ts module flags). The initializers
   // prefer a provided prop, falling back to the engine's current module value —
   // an imperative setX call before mount is never clobbered by a plain default.
@@ -492,7 +492,6 @@ function OdontogramProviderInner({
   const [fillingMaterialsState, setFillingMaterialsState] = useState<Record<string, boolean>>(() => fillingMaterialAvailability ?? getFillingMaterialAvailability());
   const [showStatusCard, setShowStatusCard] = useState<boolean>(showStatusCardProp ?? true);
   const [showOrthoCard, setShowOrthoCard] = useState<boolean>(showOrthoCardProp ?? true);
-  const [summary, setSummary] = useState<OdontogramSummary | null>(null);
   const [hasPerio, setHasPerio] = useState(false);
   const [pdfOpen, setPdfOpen] = useState(false);
   const [creditsOpen, setCreditsOpen] = useState(false);
@@ -699,17 +698,6 @@ function OdontogramProviderInner({
     setFillingMaterialsState({ ...next });
   }, [fillingMaterialsKey]);
 
-  // Refresh the tooth-information summary while its panel is open. Recomputes on
-  // every state change, and when language/numbering change (which affect labels).
-  useEffect(() => {
-    if(!toothInfoOn) return;
-    const refresh = () => {
-      setSummary(getOdontogramSummary());
-    };
-    refresh();
-    return onStateChange(refresh);
-  }, [toothInfoOn, lang, currentNumbering]);
-
   // Mirror perio-data presence into React state so the perio export menu items'
   // `disabled` gate stays live. Deliberately its OWN effect, subscribed
   // UNCONDITIONALLY (not gated by `toothInfoOn` like the summary effect above) —
@@ -760,6 +748,13 @@ function OdontogramProviderInner({
   useEffect(() => { if (selectionColorProp !== undefined) setSelectionColor(selectionColorProp); }, [selectionColorProp]);
   useEffect(() => { if (selectionBorderStyleProp !== undefined) setSelectionBorderStyle(selectionBorderStyleProp); }, [selectionBorderStyleProp]);
   useEffect(() => { if (toothInfoProp !== undefined) setToothInfoVisible(toothInfoProp); }, [toothInfoProp]);
+
+  useEffect(() => {
+    if (!toothInfoOn) return;
+    const refresh = () => setSummary(getOdontogramSummary());
+    refresh();
+    return onStateChange(refresh);
+  }, [toothInfoOn, lang, currentNumbering]);
 
   // `themeConfig.selection` is the discoverable home for the selection
   // colours — a host setting up its palette finds them next to the rest
@@ -826,8 +821,6 @@ function OdontogramProviderInner({
     onLanguage: setLang,
     isDark,
     onToggleDark: toggleDark,
-    toothInfo: toothInfoOn,
-    onToothInfo: (v) => setToothInfoVisible(v),
     exportPng: exportPngOn,
     onExportPng: (v) => setExportPngOn(v),
     exportJpg: exportJpgOn,
@@ -886,6 +879,8 @@ function OdontogramProviderInner({
     onSelectionColor: (v) => setSelectionColor(v),
     selectionBorderStyle,
     onSelectionBorderStyle: (v) => setSelectionBorderStyle(v),
+    toothInfo: toothInfoOn,
+    onToothInfo: (v) => setToothInfoVisible(v),
     perioChartAvailable,
     onPerioChartAvailable: (v) => {
       setPerioChartAvailable(v);

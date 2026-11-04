@@ -146,7 +146,7 @@ select:focus{
 
 .layout{
   display:grid;
-  grid-template-columns: 1fr 360px;
+  grid-template-columns: 1fr;
   gap:14px;
   padding:14px;
 }

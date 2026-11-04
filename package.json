@@ -3,7 +3,7 @@
   "version": "2.8.0",
   "license": "MIT",
   "type": "module",
-  "description": "Interactive, SVG-based dental odontogram (dental chart) editor for React + TypeScript — multi-surface caries/filling charting, endodontic/prosthetic/periodontal states, FDI/Universal/Palmer numbering, HL7 FHIR R4 export/import, and ICDAS scoring.",
+  "description": "Interactive, SVG-based dental odontogram (dental chart) for React + TypeScript, with per-tooth charting settings and JSON state export.",
   "author": "Zoltán Dul",
   "homepage": "https://react-advanced-odontogram.vercel.app/",
   "repository": {
@@ -23,14 +23,14 @@
     "typescript",
     "svg",
     "fhir",
-    "icdas",
-    "periodontal"
+    "icdas"
   ],
   "sideEffects": [
     "**/*.css"
   ],
   "files": [
     "dist",
+    "tooth-settings.json",
     "THIRD-PARTY-NOTICES.md"
   ],
   "main": "./dist/odontogram.js",
@@ -41,6 +41,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/odontogram.js"
     },
+    "./controls": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/odontogram.js"
+    },
+    "./tooth-settings.json": "./tooth-settings.json",
     "./style.css": "./dist/style.css"
   },
   "engines": {

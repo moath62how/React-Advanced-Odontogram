@@ -1,6 +1,7 @@
 // Part of React Advanced Odontogram - https://github.com/ZoliQua/React-Advanced-Odontogram
 // Created by Zoltan Dul (https://github.com/ZoliQua) 2025-2026
 
+import { useEffect } from "react";
 import { destroyOdontogram, initOdontogram, setNumberingSystem, clearSelection, getSelectedTeeth, setOcclusalVisible, setWisdomVisible, setShowBase, setHealthyPulpVisible, registerPlugins, setPluginState, getPluginState, getToothStateSummary, getOdontogramSummary, formatToothLabel, onStateChange, setReadOnly, getReadOnly, setNotesEnabled, getNotesEnabled, setIcdasEnabled, getIcdasEnabled, setPulpDetailLevel, getPulpDetailLevel, setSecondaryCariesMode, getSecondaryCariesMode, setRootCariesMode, getRootCariesMode, setRadiographicDepthMode, getRadiographicDepthMode, setCariesDepthEnabled, getCariesDepthEnabled, setWearDetailLevel, getWearDetailLevel, setDiscolorationDetailLevel, getDiscolorationDetailLevel, setSurfaceNotation, getSurfaceNotation, exportFhir, exportImage, exportSvg, setImportFormat, openPerioOverlay, closePerioOverlay, isPerioOverlayOpen, getPerioViewMode, setPerioViewMode, getDiagnosisCodingPack, setDiagnosisCodingPack, getSnomedEnabled, setSnomedEnabled, getPerioRowVisibility, setPerioRowVisibility, getPerioIndexNameMode, setPerioIndexNameMode, getPdfSettings, setPdfSettings, isDualStateConfirmPending, acceptDualStateConfirm, cancelDualStateConfirm, hasAnyPerioData, getChartMode, setChartMode, getStatusChart, getPlanChart, setPlanChart, getPlanChanges, compareExams, exportStatus, importStatus, exportPdf, exportPerioImage, exportPerioSvg, getFillingDefectEnabled, setFillingDefectEnabled, getFillingComplexity, setFillingComplexity, getFissureSealingEnabled, setFissureSealingEnabled, getFillingMaterialAvailability, setFillingMaterialAvailability, rewireControls, rebuildGrid, getToothAnatomy, setToothAnatomy, setToothTemplateOverrides, getToothTemplateRejections, getNumberingSystem, getScreenToothSpacing, setScreenToothSpacing, getScreenToothNumberSize, setScreenToothNumberSize, getSelectionColor, setSelectionColor, getSelectionBorderStyle, setSelectionBorderStyle, getToothInfoVisible, setToothInfoVisible } from "./odontogram";
 export { clearSelection, getSelectedTeeth, setOcclusalVisible, setWisdomVisible, setShowBase, setHealthyPulpVisible, registerPlugins, setPluginState, getPluginState, getToothStateSummary, getOdontogramSummary, formatToothLabel, onStateChange, setReadOnly, getReadOnly, setNotesEnabled, getNotesEnabled, setIcdasEnabled, getIcdasEnabled, setPulpDetailLevel, getPulpDetailLevel, setSecondaryCariesMode, getSecondaryCariesMode, setRootCariesMode, getRootCariesMode, setRadiographicDepthMode, getRadiographicDepthMode, setCariesDepthEnabled, getCariesDepthEnabled, setWearDetailLevel, getWearDetailLevel, setDiscolorationDetailLevel, getDiscolorationDetailLevel, setSurfaceNotation, getSurfaceNotation, exportFhir, exportImage, exportSvg, setImportFormat, getPerioViewMode, setPerioViewMode, getDiagnosisCodingPack, setDiagnosisCodingPack, getSnomedEnabled, setSnomedEnabled, getPerioRowVisibility, setPerioRowVisibility, getPerioIndexNameMode, setPerioIndexNameMode, getPdfSettings, setPdfSettings, isDualStateConfirmPending, acceptDualStateConfirm, cancelDualStateConfirm, initOdontogram, destroyOdontogram, setNumberingSystem, getChartMode, setChartMode, getStatusChart, getPlanChart, setPlanChart, getPlanChanges, compareExams, openPerioOverlay, closePerioOverlay, isPerioOverlayOpen, hasAnyPerioData, exportStatus, importStatus, exportPdf, exportPerioImage, exportPerioSvg, getFillingDefectEnabled, setFillingDefectEnabled, getFillingComplexity, setFillingComplexity, getFissureSealingEnabled, setFissureSealingEnabled, getFillingMaterialAvailability, setFillingMaterialAvailability, rewireControls, rebuildGrid, getToothAnatomy, setToothAnatomy, setToothTemplateOverrides, getToothTemplateRejections, getNumberingSystem, getScreenToothSpacing, setScreenToothSpacing, getScreenToothNumberSize, setScreenToothNumberSize, getSelectionColor, setSelectionColor, getSelectionBorderStyle, setSelectionBorderStyle, getToothInfoVisible, setToothInfoVisible };
 export { default as PerioChart } from "./PerioChart";
@@ -17,8 +18,6 @@ export {
 export type { PersistenceOptions } from "./persistence";
 import SettingsModal from "./SettingsModal";
 export type { FillingComplexity } from "./SettingsModal";
-import PerioChart from "./PerioChart";
-import PerioSidebar from "./PerioSidebar";
 import DualStateConfirm from "./DualStateConfirm";
 import ExportOptionsModal from "./ExportOptionsModal";
 import CreditsModal from "./CreditsModal";
@@ -35,10 +34,7 @@ export type { OdontogramPlugin, PluginLayer };
 import { OdontogramProvider, useOdontogramUi, type OdontogramProviderProps } from "./OdontogramContext";
 export { OdontogramProvider, useOdontogramUi } from "./OdontogramContext";
 export type { OdontogramUiContextValue } from "./OdontogramContext";
-import OdontogramTopbar from "./surfaces/OdontogramTopbar";
 import OdontogramChartSurface from "./surfaces/OdontogramChartSurface";
-import ToothInfoSurface from "./surfaces/ToothInfoSurface";
-import ToothControlsSurface from "./surfaces/ToothControlsSurface";
 export { default as OdontogramTopbar } from "./surfaces/OdontogramTopbar";
 export { default as OdontogramChartSurface } from "./surfaces/OdontogramChartSurface";
 export { default as ToothInfoSurface } from "./surfaces/ToothInfoSurface";
@@ -169,19 +165,13 @@ export default function App(props: Omit<OdontogramProviderProps, "children">){
 }
 
 /**
- * The default shell layout: the four surfaces plus the shell-managed layout
- * wrappers, perio bits, and modals. Reads everything from the provider via
+ * The default shell layout: the odontogram chart, controls, and settings.
+ * Reads everything from the provider via
  * {@link useOdontogramUi}; holds no state of its own.
  */
 function ShellLayout(){
   const {
     t,
-    viewMode,
-    activeView,
-    setActiveView,
-    isPerioView,
-    perioChartAvailable,
-    perioOpen,
     confirmOpen,
     settingsState,
     settingsOpen,
@@ -194,85 +184,22 @@ function ShellLayout(){
     setCaseDxOpen,
   } = useOdontogramUi();
 
+  useEffect(() => {
+    const logToothState = () => {
+      const chart = getChartMode() === "plan" ? getPlanChart() : getStatusChart();
+      console.info("Odontogram tooth state (JSON):", JSON.stringify(chart.teeth, null, 2));
+    };
+    logToothState();
+    return onStateChange(logToothState);
+  }, []);
+
   return (
     <>
-      <OdontogramTopbar />
-
       <main className="layout">
-        {/* Hide the perio entry point (view toggle / open button) entirely when
-            the Periodontal chart is turned off in Settings. */}
-        <div className={"perio-launch-bar" + (perioChartAvailable ? "" : " hidden")}>
-          {viewMode === "toggle" ? (
-            <div id="appViewToggle" className="chart-mode-toggle" role="tablist">
-              <button
-                id="appViewOdontogram"
-                type="button"
-                className={"chart-mode-btn" + (activeView === "odontogram" ? " is-active" : "")}
-                role="tab"
-                aria-selected={activeView === "odontogram"}
-                onClick={() => setActiveView("odontogram")}
-              >
-                {t("view.odontogram")}
-              </button>
-              <button
-                id="appViewDentalChart"
-                type="button"
-                className={"chart-mode-btn" + (activeView === "dentalChart" ? " is-active" : "")}
-                role="tab"
-                aria-selected={activeView === "dentalChart"}
-                onClick={() => setActiveView("dentalChart")}
-              >
-                {t("view.dentalChart")}
-              </button>
-            </div>
-          ) : (
-            <button
-              type="button"
-              id="openPerioOverlayBtn"
-              className="btn btn-ghost"
-              onClick={() => openPerioOverlay()}
-              title={t("perio.open")}
-              aria-label={t("perio.open")}
-            >
-              {t("perio.open")}
-            </button>
-          )}
-          <button
-            type="button"
-            id="openCaseDiagnosesBtn"
-            className="btn btn-ghost"
-            onClick={() => setCaseDxOpen(true)}
-            title={t("case.diagnoses.section")}
-            aria-label={t("case.diagnoses.section")}
-          >
-            {t("case.diagnoses.button")}
-          </button>
+        <div className="chart-column">
+          <OdontogramChartSurface />
         </div>
-        {/* Unmount the odontogram column while the perio (Dental Chart) view is
-            active. Composable-UI Tier 2 made control wiring re-runnable, so the
-            column can remount cleanly (OdontogramChartSurface re-runs
-            rewireControls()/rebuildGrid() on mount) instead of being hidden. */}
-        {!isPerioView && (
-          <div className="chart-column">
-            <OdontogramChartSurface />
-            <ToothInfoSurface />
-          </div>
-        )}
-        {isPerioView && (
-          <div className="dental-chart-column" dir="ltr">
-            <PerioChart inline />
-          </div>
-        )}
-        <aside className="panel">
-          {/* One region, two mutually-exclusive contents: the perio-context
-              sidebar in the perio view, the odontogram control panel otherwise.
-              ToothControlsSurface can now unmount/remount safely — it re-runs
-              rewireControls() on mount (Tier 2) — so it is a plain conditional. */}
-          {isPerioView ? <PerioSidebar /> : <ToothControlsSurface />}
-        </aside>
       </main>
-
-      {viewMode === "popup" && <PerioChart open={perioOpen} onClose={closePerioOverlay} />}
 
       <SettingsModal
         open={settingsOpen}

@@ -16,7 +16,7 @@
 
 🇬🇧 [English](lang/README-en.md) · 🇩🇪 [Deutsch](lang/README-de.md) · 🇪🇸 [Español](lang/README-es.md) · 🇫🇷 [Français](lang/README-fr.md) · 🇮🇹 [Italiano](lang/README-it.md) · 🇭🇺 [Magyar](lang/README-hu.md) · 🇵🇱 [Polski](lang/README-pl.md) · 🇧🇷 [Português (BR)](lang/README-pt-br.md) · 🇸🇰 [Slovenčina](lang/README-sk.md) · 🇷🇺 [Русский](lang/README-ru.md) · 🇸🇦 [العربية](lang/README-ar.md) · 🇨🇳 [简体中文](lang/README-zh.md)
 
-An interactive, SVG-based **dental odontogram (dental chart) editor** for **React + TypeScript** — with a full **periodontal charting module**, multi-surface caries/restorations, endodontic/prosthetic states, FDI/Universal/Palmer numbering, **HL7 FHIR R4** export/import, optional ICDAS scoring, and a 12-language UI.
+An interactive, SVG-based **dental odontogram (dental chart) editor** for **React + TypeScript** — with multi-surface caries/restorations, endodontic/prosthetic states, FDI/Universal/Palmer numbering, **HL7 FHIR R4** export/import, optional ICDAS scoring, and a 12-language UI.
 
 🔗 **Live demo:** https://react-advanced-odontogram.vercel.app/ \
 📚 **API docs:** https://zoliqua.github.io/React-Advanced-Odontogram/ \
@@ -46,6 +46,35 @@ export function Chart() {
   return <OdontogramShell language="en" numberingSystem="FDI" darkMode={false} />;
 }
 ```
+
+The default chart view renders only the odontogram, without built-in tooth controls, a separate Tooth Information panel, or the periodontal-chart view. Current per-tooth chart state is printed as JSON in the browser console on initialization and when it changes. The available per-tooth settings catalog is shipped at `react-advanced-odontogram/tooth-settings.json`. `ToothControlsSurface` remains available as a named export for hosts that want to provide their own layout.
+
+### Use the controls in another React app
+
+Import the provider, chart, and controls from the package's `/controls` entry point. The `OdontogramProvider` initializes the chart engine; place the chart and the controls wherever your app needs them:
+
+```tsx
+import {
+  OdontogramProvider,
+  OdontogramChartSurface,
+  ToothControlsSurface,
+  setCariesSurfaceForSelection,
+} from "react-advanced-odontogram/controls";
+import "react-advanced-odontogram/style.css";
+
+export function DentalChart() {
+  return (
+    <OdontogramProvider language="en">
+      <div className="layout">
+        <OdontogramChartSurface />
+        <ToothControlsSurface />
+      </div>
+    </OdontogramProvider>
+  );
+}
+```
+
+`/controls` exports the same typed API as the package root, including the individual control cards and their getter/setter functions. Use `setCariesSurfaceForSelection` and the other controller functions to build custom controls instead of rendering `ToothControlsSurface`.
 
 The imperative state API, the standalone `PerioChart` component, the guided tour, and all public types are named exports from the same entry point (`OdontogramShell` is also the default export):
 

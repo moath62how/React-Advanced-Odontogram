@@ -603,13 +603,6 @@ export const SETTINGS_TABS: SettingsTab[] = [
         />
         <ToggleRow
           t={t}
-          label={t("settings.toothInfo")}
-          descKey="settings.toothInfo.desc"
-          checked={s.toothInfo}
-          onChange={s.onToothInfo}
-        />
-        <ToggleRow
-          t={t}
           label={t("settings.panels.statuses")}
           descKey="settings.panels.statuses.desc"
           checked={s.showStatusCard}
