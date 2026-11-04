@@ -3,11 +3,16 @@
 
 import { describe, it, expect } from 'vitest';
 import { translations, type Language } from '../i18n/translations';
+import { LANGUAGES } from '../i18n/languages';
 
-const ALL_LANGUAGES: Language[] = ['hu', 'en', 'de', 'es', 'it', 'sk', 'pl', 'ru', 'pt-br', 'zh', 'ar', 'fr'];
-const PRIMARY_LANGUAGE: Language = 'hu';
+const ALL_LANGUAGES: Language[] = [...LANGUAGES];
+const PRIMARY_LANGUAGE: Language = 'en';
 
 describe('translations.ts', () => {
+  it('only exposes English and Arabic', () => {
+    expect(LANGUAGES).toEqual(['en', 'ar']);
+  });
+
   it('exports all languages', () => {
     for (const lang of ALL_LANGUAGES) {
       expect(translations[lang]).toBeDefined();
@@ -15,12 +20,12 @@ describe('translations.ts', () => {
     }
   });
 
-  it('primary language (hu) has at least 100 keys', () => {
+  it('primary language (en) has at least 100 keys', () => {
     const keys = Object.keys(translations[PRIMARY_LANGUAGE]);
     expect(keys.length).toBeGreaterThanOrEqual(100);
   });
 
-  describe('every language has all keys from the primary language (hu)', () => {
+  describe('every language has all keys from the primary language (en)', () => {
     const primaryKeys = Object.keys(translations[PRIMARY_LANGUAGE]).sort();
 
     for (const lang of ALL_LANGUAGES) {

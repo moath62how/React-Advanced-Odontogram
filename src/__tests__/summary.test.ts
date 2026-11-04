@@ -4,6 +4,7 @@
 import { describe, it, expect } from 'vitest';
 import { getOdontogramSummary, __setToothStateForTest } from '../odontogram';
 import { setI18nLanguage, t } from '../i18n/useI18n';
+import { LANGUAGES } from '../i18n/languages';
 
 // getOdontogramSummary reads module-level tooth state. Without initOdontogram the
 // state map is empty, which still exercises the full shape, the empty-section
@@ -34,7 +35,7 @@ describe('getOdontogramSummary', () => {
   });
 
   it('resolves all referenced i18n keys (no raw keys leak through)', () => {
-    for (const lang of ['hu', 'en', 'de', 'es', 'it', 'sk', 'pl', 'ru'] as const) {
+    for (const lang of LANGUAGES) {
       setI18nLanguage(lang);
       const s = getOdontogramSummary();
       const texts = [s.overview, s.periodontalTitle, s.periodontalText, ...s.sections.flatMap((sec) => [sec.heading, sec.emptyText])];

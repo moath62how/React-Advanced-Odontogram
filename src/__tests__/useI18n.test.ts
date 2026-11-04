@@ -6,7 +6,7 @@ import { t, setI18nLanguage, getI18nLanguage, onI18nChange } from '../i18n/useI1
 
 describe('useI18n.ts – standalone functions', () => {
   beforeEach(() => {
-    setI18nLanguage('hu');
+    setI18nLanguage('en');
   });
 
   describe('t() – translation function', () => {
@@ -17,12 +17,11 @@ describe('useI18n.ts – standalone functions', () => {
     });
 
     it('uses explicit language override', () => {
-      setI18nLanguage('hu');
       // app.title is a language-independent product name, so use a key that
       // legitimately differs per language to test the override.
       const en = t('app.subtitle', 'en');
-      const hu = t('app.subtitle', 'hu');
-      expect(en).not.toBe(hu);
+      const ar = t('app.subtitle', 'ar');
+      expect(en).not.toBe(ar);
     });
 
     it('falls back to English when key is missing in a language', () => {
@@ -56,8 +55,8 @@ describe('useI18n.ts – standalone functions', () => {
   });
 
   describe('getI18nLanguage() / setI18nLanguage()', () => {
-    it('defaults to hu', () => {
-      expect(getI18nLanguage()).toBe('hu');
+    it('defaults to en', () => {
+      expect(getI18nLanguage()).toBe('en');
     });
 
     it('changes language correctly', () => {
@@ -68,7 +67,7 @@ describe('useI18n.ts – standalone functions', () => {
     it('does not fire listeners when setting the same language', () => {
       let callCount = 0;
       const unsubscribe = onI18nChange(() => { callCount++; });
-      setI18nLanguage('hu'); // Already hu
+      setI18nLanguage('en'); // Already en
       expect(callCount).toBe(0);
       unsubscribe();
     });
@@ -79,8 +78,8 @@ describe('useI18n.ts – standalone functions', () => {
       let receivedLang: string | null = null;
       const unsubscribe = onI18nChange((lang) => { receivedLang = lang; });
 
-      setI18nLanguage('de');
-      expect(receivedLang).toBe('de');
+      setI18nLanguage('ar');
+      expect(receivedLang).toBe('ar');
 
       unsubscribe();
     });
@@ -89,11 +88,11 @@ describe('useI18n.ts – standalone functions', () => {
       let callCount = 0;
       const unsubscribe = onI18nChange(() => { callCount++; });
 
-      setI18nLanguage('en');
+      setI18nLanguage('ar');
       expect(callCount).toBe(1);
 
       unsubscribe();
-      setI18nLanguage('de');
+      setI18nLanguage('en');
       expect(callCount).toBe(1); // Should not have incremented
     });
 
@@ -102,8 +101,8 @@ describe('useI18n.ts – standalone functions', () => {
       const unsub1 = onI18nChange((lang) => calls.push(`a:${lang}`));
       const unsub2 = onI18nChange((lang) => calls.push(`b:${lang}`));
 
-      setI18nLanguage('es');
-      expect(calls).toEqual(['a:es', 'b:es']);
+      setI18nLanguage('ar');
+      expect(calls).toEqual(['a:ar', 'b:ar']);
 
       unsub1();
       unsub2();

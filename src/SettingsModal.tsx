@@ -2,7 +2,7 @@
 // Created by Zoltan Dul (https://github.com/ZoliQua) 2025-2026
 
 import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from "react";
-import type { Language } from "./i18n/languages";
+import { LANGUAGES, type Language } from "./i18n/languages";
 import type { NumberingSystem } from "./utils/numbering";
 import type {
   PulpDetailLevel,
@@ -163,20 +163,10 @@ const NUMBERING_OPTIONS: { value: NumberingSystem; labelKey: string }[] = [
   { value: "PALMER", labelKey: "numbering.palmer" },
 ];
 
-const LANGUAGE_OPTIONS: { value: Language; labelKey: string }[] = [
-  { value: "hu", labelKey: "language.hu" },
-  { value: "en", labelKey: "language.en" },
-  { value: "de", labelKey: "language.de" },
-  { value: "es", labelKey: "language.es" },
-  { value: "it", labelKey: "language.it" },
-  { value: "sk", labelKey: "language.sk" },
-  { value: "pl", labelKey: "language.pl" },
-  { value: "ru", labelKey: "language.ru" },
-  { value: "pt-br", labelKey: "language.pt-br" },
-  { value: "zh", labelKey: "language.zh" },
-  { value: "ar", labelKey: "language.ar" },
-  { value: "fr", labelKey: "language.fr" },
-];
+const LANGUAGE_OPTIONS: { value: Language; labelKey: string }[] = LANGUAGES.map((value) => ({
+  value,
+  labelKey: `language.${value}`,
+}));
 
 const DIAGNOSIS_CODING_OPTIONS: { value: string; labelKey: string }[] = [
   { value: "none", labelKey: "settings.diagnosisCoding.none" },

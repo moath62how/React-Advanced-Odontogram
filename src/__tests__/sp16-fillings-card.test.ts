@@ -19,6 +19,7 @@
 // No live DOM/SVG grid required for (a) — driven through the pure/exported
 // helpers, same seam as sp6-task4's tests. (b) reads the raw CSS source.
 import { describe, it, expect } from "vitest";
+import { LANGUAGES } from "../i18n/languages";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import {
@@ -88,20 +89,20 @@ describe("computeFillingDefectSummaryLine (SP16 Task 1 fillings-panel hint, para
     expect(line).toBe("");
   });
   it("one tooth, one surface -> singular phrasing, \"35 (O)\"", () => {
-    setI18nLanguage("hu");
+    setI18nLanguage("en");
     const states = new Map([[35, makeState({ defect: ["occlusal"], filled: ["occlusal"] })]]);
     const line = computeFillingDefectSummaryLine([35], (tn) => states.get(tn));
-    expect(line).toBe(t("filling.fillingDefectSummarySingle", "hu", { teeth: "35 (O)" }));
+    expect(line).toBe(t("filling.fillingDefectSummarySingle", "en", { teeth: "35 (O)" }));
   });
   it("multiple selected teeth with defects -> plural phrasing, one entry per tooth", () => {
-    setI18nLanguage("hu");
+    setI18nLanguage("en");
     const states = new Map([
       [36, makeState({ defect: ["occlusal"], filled: ["occlusal"] })],
       [35, makeState({ defect: ["buccal"], filled: ["buccal"] })],
     ]);
     const line = computeFillingDefectSummaryLine([36, 35], (tn) => states.get(tn));
     // Entries are ordered by the codebase's existing ALL_TEETH order (35 before 36).
-    expect(line).toBe(t("filling.fillingDefectSummaryMultiple", "hu", { teeth: "35 (B), 36 (O)" }));
+    expect(line).toBe(t("filling.fillingDefectSummaryMultiple", "en", { teeth: "35 (B), 36 (O)" }));
   });
   it("a mix of teeth with and without defects -> only the defect teeth are listed", () => {
     setI18nLanguage("en");
@@ -130,7 +131,7 @@ describe("computeFillingDefectSummaryLine (SP16 Task 1 fillings-panel hint, para
 
 describe("filling.fillingDefectSummarySingle/Multiple resolve in every UI language", () => {
   it("is a non-empty, non-raw-key translation for every supported language", () => {
-    for (const lang of ["hu", "en", "de", "es", "it", "sk", "pl", "ru", "pt-br", "zh", "ar", "fr"] as const) {
+    for (const lang of LANGUAGES) {
       const single = t("filling.fillingDefectSummarySingle", lang, { teeth: "35 (O)" });
       const multiple = t("filling.fillingDefectSummaryMultiple", lang, { teeth: "35 (O), 36 (M)" });
       expect(single).not.toBe("filling.fillingDefectSummarySingle");

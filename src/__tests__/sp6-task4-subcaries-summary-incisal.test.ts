@@ -21,6 +21,7 @@
 // No live DOM/SVG grid required — driven through the pure/exported helpers,
 // same seam as sp6-task2/task3's tests.
 import { describe, it, expect } from "vitest";
+import { LANGUAGES } from "../i18n/languages";
 import {
   isAnteriorTooth,
   surfaceLabelKey,
@@ -74,7 +75,7 @@ describe("surfaceLabelKey (spec §8 anterior label swap)", () => {
     expect(surfaceLabelKey("nonsense")).toBe("nonsense");
   });
   it("surface.incisal resolves to a real translation in every UI language", () => {
-    for (const lang of ["hu", "en", "de", "es", "it", "sk", "pl", "ru", "pt-br", "zh", "ar", "fr"] as const) {
+    for (const lang of LANGUAGES) {
       const label = t("surface.incisal", lang);
       expect(label).not.toBe("surface.incisal"); // not a raw leaked key
       expect(label.length).toBeGreaterThan(0);
@@ -134,27 +135,27 @@ describe("computeFillingSubcariesSummaryLine (spec §7 fillings-panel line)", ()
     expect(line).toBe("");
   });
   it("one tooth, one surface -> singular phrasing, \"35 (O)\"", () => {
-    setI18nLanguage("hu");
+    setI18nLanguage("en");
     const states = new Map([[35, makeState({ caried: ["occlusal"], filled: ["occlusal"] })]]);
     const line = computeFillingSubcariesSummaryLine([35], (tn) => states.get(tn));
-    expect(line).toBe(t("filling.subcariesSummarySingle", "hu", { teeth: "35 (O)" }));
-    expect(line).toBe("35 (O) tömése mellett subcaries van beállítva.");
+    expect(line).toBe(t("filling.subcariesSummarySingle", "en", { teeth: "35 (O)" }));
+    expect(line).toBe("35 (O) has subcaries set next to its filling.");
   });
   it("one tooth, combined surfaces -> still singular phrasing, \"35 (MOD)\"", () => {
-    setI18nLanguage("hu");
+    setI18nLanguage("en");
     const states = new Map([[35, makeState({ caried: ["mesial", "occlusal", "distal"], filled: ["mesial", "occlusal", "distal"] })]]);
     const line = computeFillingSubcariesSummaryLine([35], (tn) => states.get(tn));
-    expect(line).toBe("35 (MOD) tömése mellett subcaries van beállítva.");
+    expect(line).toBe("35 (MOD) has subcaries set next to its filling.");
   });
   it("multiple selected teeth with subcaries -> plural phrasing, one entry per tooth", () => {
-    setI18nLanguage("hu");
+    setI18nLanguage("en");
     const states = new Map([
       [36, makeState({ caried: ["occlusal"], filled: ["occlusal"] })],
       [35, makeState({ caried: ["buccal"], filled: ["buccal"] })],
     ]);
     const line = computeFillingSubcariesSummaryLine([36, 35], (tn) => states.get(tn));
     // Entries are ordered by the codebase's existing ALL_TEETH order (35 before 36).
-    expect(line).toBe("35 (B), 36 (O) tömések mellett subcaries van beállítva.");
+    expect(line).toBe("35 (B), 36 (O) have subcaries set next to their fillings.");
   });
   it("a mix of teeth with and without subcaries -> only the subcaries teeth are listed", () => {
     setI18nLanguage("en");

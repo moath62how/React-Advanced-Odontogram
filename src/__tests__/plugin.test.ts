@@ -41,7 +41,7 @@ describe("plugin.ts", () => {
     it("can create a valid plugin definition", () => {
       const plugin: OdontogramPlugin = {
         id: "test-plugin",
-        label: { en: "Test Plugin", hu: "Teszt Plugin" },
+        label: { en: "Test Plugin", ar: "Test Arabic Plugin" },
         layer: "overlay",
         renderSvg: (toothNo, quadrant, customState) => {
           if (!customState) return null;

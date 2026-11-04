@@ -6,7 +6,7 @@
 import { test, expect } from "@playwright/test";
 import { chooseLanguage, openChart, sideTiles } from "./helpers";
 
-const LOCALE_CHUNK = /\/assets\/(pt-br|hu|de|es|it|sk|pl|ru|zh|ar|fr)-[\w-]+\.js$/;
+const LOCALE_CHUNK = /\/assets\/(ar)-[\w-]+\.js$/;
 
 test("only English is downloaded at start; a language is fetched when it is chosen", async ({ page }) => {
   const fetched: string[] = [];
@@ -16,26 +16,26 @@ test("only English is downloaded at start; a language is fetched when it is chos
   expect(fetched, "a language chunk was fetched before anyone asked for it").toEqual([]);
   await expect(page.locator(".odontogram-root")).toHaveAttribute("lang", "en");
 
-  await chooseLanguage(page, /Hungarian/);
-  await expect(page.locator(".odontogram-root")).toHaveAttribute("lang", "hu");
-  await expect(page.locator(".topbar .subtitle")).toContainText("Magyar nyelven.");
-  expect(fetched).toEqual(["hu"]);
+  await chooseLanguage(page, /Arabic/);
+  await expect(page.locator(".odontogram-root")).toHaveAttribute("lang", "ar");
+  await expect(page.locator(".topbar .subtitle")).toContainText("باللغة العربية");
+  expect(fetched).toEqual(["ar"]);
 });
 
 test("a switch keeps the current language on screen until the new one arrives", async ({ page }) => {
   await openChart(page);
   let release!: () => void;
   const held = new Promise<void>((resolve) => { release = resolve; });
-  await page.route(/\/assets\/de-[\w-]+\.js$/, async (route) => { await held; await route.continue(); });
+  await page.route(/\/assets\/ar-[\w-]+\.js$/, async (route) => { await held; await route.continue(); });
 
-  await chooseLanguage(page, /German/);
-  // German is still downloading: the UI must still be English — not blank, and
+  await chooseLanguage(page, /Arabic/);
+  // Arabic is still downloading: the UI must still be English — not blank, and
   // not half-switched.
   await expect(page.locator(".odontogram-root")).toHaveAttribute("lang", "en");
   await expect(page.locator(".topbar .subtitle")).toContainText("In English.");
 
   release();
-  await expect(page.locator(".odontogram-root")).toHaveAttribute("lang", "de");
+  await expect(page.locator(".odontogram-root")).toHaveAttribute("lang", "ar");
 });
 
 test("arabic: the interface mirrors, the dental chart stays left-to-right", async ({ page }) => {

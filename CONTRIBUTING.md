@@ -28,10 +28,9 @@ This is a standalone React and TypeScript library built with Vite.
 
 ## Translations and i18n
 
-All user facing text lives in `src/i18n/translations.ts`. Hungarian is the
-authoritative key set, so add a key there first, then add the same key to every
-other language. The UI currently ships in twelve languages. Each language also
-has its own README in `lang/`.
+User-facing translations live in `src/i18n/locales/`. English (`en`) is the
+authoritative key set; Arabic (`ar`) must carry the same keys. The UI currently
+ships in English and Arabic. Translated READMEs are maintained under `lang/`.
 
 ## Adding a National Diagnosis-Coding Pack
 

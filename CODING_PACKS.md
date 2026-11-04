@@ -157,7 +157,7 @@ clinical or billing use.**
 ## Key Points
 
 - A **translation pack never changes the code**, only the display. BNO-10 uses the exact same codes as WHO ICD-10; the code in the FHIR export is unchanged whether BNO-10 or WHO is selected.
-- **All 12 languages must have a label** for every new pack option added to `DIAGNOSIS_CODING_OPTIONS`, even if the option is only for one country. This ensures the Settings menu is consistent in every language the app ships.
+- **Every supported UI language must have a label** for every new pack option added to `DIAGNOSIS_CODING_OPTIONS`, even if the option is only for one country. This ensures the Settings menu is consistent in every language the app ships.
 - **Payload version is unaffected** — adding a pack is a UI-only change. The JSON export does not include which pack is selected (the pack is applied at export time based on the Settings choice).
 - **FHIR output changes** — the `Condition.coding` will carry the national code system URI instead of the WHO system URI when the pack is active, and the display text will be localized to the pack's language (for translation packs, the code stays the same; for modification packs, the code changes too).
 

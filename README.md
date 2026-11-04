@@ -4,7 +4,7 @@
 
 # 🦷 React Advanced Odontogram
 
-[![npm](https://img.shields.io/npm/v/react-advanced-odontogram?style=for-the-badge&logo=npm&color=CB3837)](https://www.npmjs.com/package/react-advanced-odontogram)
+[![npm](https://img.shields.io/npm/v/@moa1h/react-advanced-odontogram?style=for-the-badge&logo=npm&color=CB3837)](https://www.npmjs.com/package/@moa1h/react-advanced-odontogram)
 [![Version](https://img.shields.io/badge/version-2.8.0-green?style=for-the-badge)](https://github.com/ZoliQua/React-Advanced-Odontogram/releases)
 [![License](https://img.shields.io/badge/license-MIT-orange?style=for-the-badge)](https://github.com/ZoliQua/React-Advanced-Odontogram/blob/main/LICENSE)
 [![DOI](https://raw.githubusercontent.com/ZoliQua/React-Advanced-Odontogram/main/src/assets/zenodo.21156787.svg)](https://doi.org/10.5281/zenodo.21156787)
@@ -29,7 +29,7 @@ An interactive, SVG-based **dental odontogram (dental chart) editor** for **Reac
 ## 📦 Installation
 
 ```bash
-npm install react-advanced-odontogram react react-dom
+npm install @moa1h/react-advanced-odontogram react react-dom
 ```
 
 **Requirements:** React **18 or 19** (peer dependency); a bundler that supports the `exports` field and ESM (Vite, webpack 5, Next.js, Rollup, esbuild, Parcel). The package is **ESM-only**.
@@ -39,15 +39,15 @@ npm install react-advanced-odontogram react react-dom
 Render `OdontogramShell` and import the stylesheet **once**:
 
 ```tsx
-import { OdontogramShell } from "react-advanced-odontogram";
-import "react-advanced-odontogram/style.css";
+import { OdontogramShell } from "@moa1h/react-advanced-odontogram";
+import "@moa1h/react-advanced-odontogram/style.css";
 
 export function Chart() {
   return <OdontogramShell language="en" numberingSystem="FDI" darkMode={false} />;
 }
 ```
 
-The default chart view renders only the odontogram, without built-in tooth controls, a separate Tooth Information panel, or the periodontal-chart view. Current per-tooth chart state is printed as JSON in the browser console on initialization and when it changes. The available per-tooth settings catalog is shipped at `react-advanced-odontogram/tooth-settings.json`. `ToothControlsSurface` remains available as a named export for hosts that want to provide their own layout.
+The default chart view renders only the odontogram, without built-in tooth controls, a separate Tooth Information panel, or the periodontal-chart view. Current per-tooth chart state is printed as JSON in the browser console on initialization and when it changes. The available per-tooth settings catalog is shipped at `@moa1h/react-advanced-odontogram/tooth-settings.json`. `ToothControlsSurface` remains available as a named export for hosts that want to provide their own layout.
 
 ### Use the controls in another React app
 
@@ -59,8 +59,8 @@ import {
   OdontogramChartSurface,
   ToothControlsSurface,
   setCariesSurfaceForSelection,
-} from "react-advanced-odontogram/controls";
-import "react-advanced-odontogram/style.css";
+} from "@moa1h/react-advanced-odontogram/controls";
+import "@moa1h/react-advanced-odontogram/style.css";
 
 export function DentalChart() {
   return (
@@ -76,6 +76,47 @@ export function DentalChart() {
 
 `/controls` exports the same typed API as the package root, including the individual control cards and their getter/setter functions. Use `setCariesSurfaceForSelection` and the other controller functions to build custom controls instead of rendering `ToothControlsSurface`.
 
+The selection-based setters apply to the teeth currently selected on the chart.
+For example, a host can render its own button and use the public hook to keep it
+in sync with chart selection:
+
+```tsx
+import {
+  getSelectedTeeth,
+  OdontogramProvider,
+  OdontogramChartSurface,
+  setToothSelectionForSelection,
+  useEngineState,
+} from "@moa1h/react-advanced-odontogram/controls";
+
+function CustomToothControls() {
+  const selectedTeeth = useEngineState(getSelectedTeeth);
+
+  return (
+    <button
+      disabled={selectedTeeth.length === 0}
+      onClick={() => setToothSelectionForSelection("implant")}
+    >
+      Mark selected teeth as implants ({selectedTeeth.length})
+    </button>
+  );
+}
+
+export function CustomChart() {
+  return (
+    <OdontogramProvider language="en">
+      <OdontogramChartSurface />
+      <CustomToothControls />
+    </OdontogramProvider>
+  );
+}
+```
+
+Select one or more teeth on `OdontogramChartSurface`; custom controls can then
+call the exported `*ForSelection` setters, while `useEngineState` subscribes to
+selection and chart changes. `OdontogramChartSurface` and these APIs are also
+named exports from the package root.
+
 The imperative state API, the standalone `PerioChart` component, the guided tour, and all public types are named exports from the same entry point (`OdontogramShell` is also the default export):
 
 ```ts
@@ -87,7 +128,7 @@ import {
   exportStatus, importStatus,   // JSON state serialization / hydration
   exportFhir, exportSvg, exportImage,
   setReadOnly, startIntroTour,
-} from "react-advanced-odontogram";
+} from "@moa1h/react-advanced-odontogram";
 ```
 
 > **SSR:** the component is client-only (reads the DOM on mount). In Next.js render it in a Client Component (`"use client"`) or via a client-only dynamic import.
@@ -118,8 +159,8 @@ Per-site probing depth, gingival margin, bleeding on probing (+ suppuration) at 
 - 🔄 **Periodontal data round-trips through FHIR.** The importer reads the LOINC 74029-0 periodontal panels back into each tooth — probing depth, gingival margin (reconstructed from CAL, so pseudopocket values survive), BOP, furcation, O'Leary plaque, the PI/GI and implant mPI/mBI indices and keratinized-gingiva width — plus the smoking-status and HbA1c evidence Observations. Conditions coded only in ICD-10-CM or SNOMED CT are recognised too, so a foreign bundle imports what it can.
 - 🧬 **SNOMED CT for the whole diagnosis catalog.** 48 of the 50 slots now carry a verified SNOMED CT International concept (active, core module, matching FSN). Two stay deliberately unset because SNOMED International has no umbrella concept for them: jaw-size anomaly (K07.0) and dentofacial functional abnormalities (K07.5). The SNOMED overlay remains opt-in in Settings.
 - 📦 **A loadable FHIR terminology package.** The repository's `fhir/` folder is a FHIR NPM package (`react-advanced-odontogram.fhir`, FHIR 4.0.1) holding the engine CodeSystem plus generated ValueSets — one per clinical-axis value group, one for the finding types and an all-codes set. Point a validator at it with `-ig ./fhir`.
-- 🖼️ PNG / JPG / SVG chart export and a customizable, **multilingual PDF report** (jsPDF, lazy-loaded) — colour themes, a grouped dentition-summary table, a periodontal chart/description, and bundled Unicode fonts so every UI language (incl. Hungarian accents, Cyrillic, Arabic RTL and Chinese) renders correctly
-- 🔢 FDI / Universal / Palmer numbering · 🌐 12 UI languages (HU/EN/DE/ES/IT/SK/PL/RU/PT-BR/AR/ZH/FR, Arabic RTL) · 🎨 theming via `--odon-*` CSS variables · 🧩 plugin system · ⌨️ keyboard accessibility
+- 🖼️ PNG / JPG / SVG chart export and a customizable, **multilingual PDF report** (jsPDF, lazy-loaded) — colour themes, a grouped dentition-summary table, a periodontal chart/description, and bundled Unicode fonts for English and Arabic RTL
+- 🔢 FDI / Universal / Palmer numbering · 🌐 English and Arabic UI (Arabic RTL) · 🎨 theming via `--odon-*` CSS variables · 🧩 plugin system · ⌨️ keyboard accessibility
 
 ## 📖 Documentation
 

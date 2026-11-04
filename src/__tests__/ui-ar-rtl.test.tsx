@@ -1,11 +1,11 @@
 // Part of React Advanced Odontogram - https://github.com/ZoliQua/React-Advanced-Odontogram
 // Created by Zoltan Dul (https://github.com/ZoliQua) 2025-2026
 
-// Task 4 (Arabic+Chinese sub-project): RTL layout for Arabic.
+// Arabic RTL layout.
 //
 // The shell root (`.odontogram-root`) carries a reactive `dir`/`lang` pair
 // driven by the active UI language — `dir="rtl"` for Arabic, `dir="ltr"`
-// for every other language (including the newly-added `zh`, which is LTR).
+// for every other supported language.
 // The dental chart (`#toothGrid`) is a 16-col grid filled 18->28 and must
 // NEVER auto-reverse under an RTL shell — it stays `dir="ltr"` regardless
 // of the active language. This mirrors `App.test.tsx`'s mock harness
@@ -159,6 +159,9 @@ vi.mock('../odontogram', () => ({
   setScreenToothNumberSize: vi.fn(),
   getSelectionColor: vi.fn().mockReturnValue("#3b7bff"),
   setSelectionColor: vi.fn(),
+  getChartMode: vi.fn().mockReturnValue("status"),
+  getStatusChart: vi.fn().mockReturnValue({ teeth: {} }),
+  getPlanChart: vi.fn().mockReturnValue({}),
   getSelectionBorderStyle: vi.fn().mockReturnValue("dashed"),
   setSelectionBorderStyle: vi.fn(),
   getToothInfoVisible: vi.fn().mockReturnValue(true),
@@ -209,10 +212,10 @@ describe('Arabic RTL layout', () => {
     expect(root.getAttribute('lang')).toBe('en');
   });
 
-  it('uses dir=ltr on the shell root for Chinese (zh is LTR, not RTL)', () => {
-    const { container } = render(<App language="zh" />);
+  it('uses dir=ltr on the shell root for English (en is LTR, not RTL)', () => {
+    const { container } = render(<App language="en" />);
     const root = container.querySelector('.odontogram-root') as HTMLElement;
     expect(root.getAttribute('dir')).toBe('ltr');
-    expect(root.getAttribute('lang')).toBe('zh');
+    expect(root.getAttribute('lang')).toBe('en');
   });
 });

@@ -22,18 +22,11 @@ const inflight = new Map<Language, Promise<Table>>();
 // One LITERAL `import()` per language. That is what makes the bundler emit a
 // separate chunk for each; a template-string import would be analysed as a glob
 // over the folder, which also matches the statically imported `en` above.
-const LOADERS: Record<Exclude<Language, "en">, () => Promise<{ default: Table }>> = {
-  hu: () => import("./locales/hu"),
-  de: () => import("./locales/de"),
-  es: () => import("./locales/es"),
-  it: () => import("./locales/it"),
-  sk: () => import("./locales/sk"),
-  pl: () => import("./locales/pl"),
-  ru: () => import("./locales/ru"),
-  "pt-br": () => import("./locales/pt-br"),
-  zh: () => import("./locales/zh"),
+const LOADERS: Record<
+  Exclude<Language, "en">,
+  () => Promise<{ default: Table }>
+> = {
   ar: () => import("./locales/ar"),
-  fr: () => import("./locales/fr"),
 };
 
 /** Whether a language's strings are available (synchronously) right now. */
@@ -54,12 +47,14 @@ export function getLoadedTable(lang: Language): Table | undefined {
  * that turns that into "stay on the current language".
  */
 export function loadLanguage(lang: Language): Promise<void> {
-  if(tables[lang]) return Promise.resolve();
+  if (tables[lang]) return Promise.resolve();
   let pending = inflight.get(lang);
-  if(!pending){
+  if (!pending) {
     pending = LOADERS[lang as Exclude<Language, "en">]()
       .then((m) => (tables[lang] = m.default))
-      .finally(() => { inflight.delete(lang); });
+      .finally(() => {
+        inflight.delete(lang);
+      });
     inflight.set(lang, pending);
   }
   return pending.then(() => undefined);

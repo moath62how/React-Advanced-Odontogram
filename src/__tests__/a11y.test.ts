@@ -16,10 +16,10 @@ describe('Accessibility & Read-only i18n', () => {
   });
 
   it('readOnly.label key count matches across all languages', () => {
-    const huKeys = Object.keys(translations.hu).filter(k => k.startsWith('readOnly.'));
+    const enKeys = Object.keys(translations.en).filter(k => k.startsWith('readOnly.'));
     for (const lang of LANGUAGES) {
       const langKeys = Object.keys(translations[lang] as Record<string, string>).filter(k => k.startsWith('readOnly.'));
-      expect(langKeys.length, `${lang} readOnly key count mismatch`).toBe(huKeys.length);
+      expect(langKeys.length, `${lang} readOnly key count mismatch`).toBe(enKeys.length);
     }
   });
 
@@ -45,10 +45,10 @@ describe('Notes i18n', () => {
   });
 
   it('note key count matches across all languages', () => {
-    const huKeys = Object.keys(translations.hu).filter(k => k.startsWith('note.'));
+    const enKeys = Object.keys(translations.en).filter(k => k.startsWith('note.'));
     for (const lang of LANGUAGES) {
       const langKeys = Object.keys(translations[lang] as Record<string, string>).filter(k => k.startsWith('note.'));
-      expect(langKeys.length, `${lang} note key count mismatch`).toBe(huKeys.length);
+      expect(langKeys.length, `${lang} note key count mismatch`).toBe(enKeys.length);
     }
   });
 });

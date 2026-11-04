@@ -4,11 +4,12 @@
 // DX-3b Task 4 — i18n-key-presence test for the case/regional diagnoses card.
 // `case.diagnoses.section`/`case.diagnoses.add`/`case.diagnoses.remove`, the
 // four `caseDx.laterality.*` qualifiers, and a `dx.case.<key>` label for every
-// one of the 28 `CaseConditionKey`s (`CASE_DX_CODES`) must exist in ALL 12
-// languages — reads the REAL translations table directly, mirroring the
+// one of the 28 `CaseConditionKey`s (`CASE_DX_CODES`) must exist in every
+// supported language — reads the REAL translations table directly, mirroring the
 // key-presence pattern in `dx-card.test.tsx`'s "DX-2 Task 4" describe block.
 import { describe, it, expect } from "vitest";
 import { CASE_DX_CODES } from "../dx/caseCodes";
+import { LANGUAGES } from "../i18n/languages";
 
 const CARD_KEYS = [
   "case.diagnoses.section",
@@ -21,9 +22,9 @@ const CARD_KEYS = [
 ];
 const DX_KEYS = Object.keys(CASE_DX_CODES).map((k) => `dx.case.${k}`);
 const ALL_KEYS = [...CARD_KEYS, ...DX_KEYS];
-const ALL_LANGUAGES = ["hu", "en", "de", "es", "it", "sk", "pl", "ru", "pt-br", "zh", "ar", "fr"] as const;
+const ALL_LANGUAGES = LANGUAGES;
 
-describe("DX-3b Task 4: case/regional diagnoses i18n keys present in all languages", () => {
+describe("DX-3b Task 4: case/regional diagnoses i18n keys present in supported languages", () => {
   it("covers all 28 CaseConditionKeys", () => {
     expect(DX_KEYS.length).toBe(28);
   });

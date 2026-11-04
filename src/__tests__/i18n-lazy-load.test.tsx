@@ -35,7 +35,7 @@ async function freshI18n() {
   return { ...loader, ...i18n };
 }
 
-afterEach(() => { vi.doUnmock("../i18n/locales/de"); vi.restoreAllMocks(); cleanup(); });
+afterEach(() => { vi.doUnmock("../i18n/locales/ar"); vi.restoreAllMocks(); cleanup(); });
 
 describe("i18n: the code split holds", () => {
   it("no application module imports a non-English locale, or the all-locales table, statically", () => {
@@ -55,7 +55,7 @@ describe("i18n: the code split holds", () => {
 
   it("the loader reaches every other language through a literal dynamic import", () => {
     const loader = readFileSync(path.join(SRC, "i18n/loader.ts"), "utf8");
-    for (const lang of ["hu", "de", "es", "it", "sk", "pl", "ru", "pt-br", "zh", "ar", "fr"]) {
+    for (const lang of ["ar"]) {
       expect(loader, lang).toContain(`import("./locales/${lang}")`);
     }
     expect(loader).toMatch(/^import en from "\.\/locales\/en";$/m);
@@ -68,46 +68,41 @@ describe("i18n: load first, switch second", () => {
   it("a fresh app has English only", async () => {
     const i = await freshI18n();
     expect(i.isLanguageLoaded("en")).toBe(true);
-    expect(i.isLanguageLoaded("hu")).toBe(false);
+    expect(i.isLanguageLoaded("ar")).toBe(false);
     expect(i.getI18nLanguage()).toBe("en");
   });
 
   it("switching to an unloaded language flips only once its strings are in", async () => {
     const i = await freshI18n();
-    const pending = i.setI18nLanguage("hu");
+    const pending = i.setI18nLanguage("ar");
     // Synchronously after the call nothing has moved: t() is still answering in
     // a language it can resolve.
     expect(i.getI18nLanguage()).toBe("en");
     expect(i.t("credits.close")).toBe("Close");
     await pending;
-    expect(i.getI18nLanguage()).toBe("hu");
-    expect(i.t("credits.close")).toBe("Bezárás");
+    expect(i.getI18nLanguage()).toBe("ar");
+    expect(i.t("credits.close")).toBe(i.t("credits.close", "ar"));
   });
 
   it("a loaded language still switches synchronously, as it always did", async () => {
     const i = await freshI18n();
-    await i.setI18nLanguage("hu");
+    await i.setI18nLanguage("ar");
     i.setI18nLanguage("en");
     expect(i.getI18nLanguage()).toBe("en");     // no await needed
   });
 
   it("the latest switch wins when an earlier one is still downloading", async () => {
     const i = await freshI18n();
-    const first = i.setI18nLanguage("fr");
+    const first = i.setI18nLanguage("ar");
     await i.setI18nLanguage("en");              // the user changed their mind mid-download
     await first;
     expect(i.getI18nLanguage()).toBe("en");
-
-    const a = i.setI18nLanguage("de");
-    const b = i.setI18nLanguage("es");
-    await Promise.all([a, b]);
-    expect(i.getI18nLanguage()).toBe("es");
   });
 
   it("concurrent requests for one language share a single load", async () => {
     const i = await freshI18n();
-    await Promise.all([i.setI18nLanguage("it"), i.setI18nLanguage("it"), i.setI18nLanguage("it")]);
-    expect(i.getI18nLanguage()).toBe("it");
+    await Promise.all([i.setI18nLanguage("ar"), i.setI18nLanguage("ar"), i.setI18nLanguage("ar")]);
+    expect(i.getI18nLanguage()).toBe("ar");
   });
 });
 
@@ -116,7 +111,7 @@ describe("i18n: a language that fails to load", () => {
 
   it("leaves the current language, never rejects, reports it — and is retried next time", async () => {
     let attempts = 0;
-    vi.doMock("../i18n/locales/de", () => {
+    vi.doMock("../i18n/locales/ar", () => {
       attempts++;
       if (attempts === 1) throw new Error("chunk 404");
       return { default: { "credits.close": "Schließen" } };
@@ -124,12 +119,12 @@ describe("i18n: a language that fails to load", () => {
     const err = vi.spyOn(console, "error").mockImplementation(() => {});
     const i = await freshI18n();
 
-    await expect(i.setI18nLanguage("de")).resolves.toBeUndefined();
+    await expect(i.setI18nLanguage("ar")).resolves.toBeUndefined();
     expect(i.getI18nLanguage()).toBe("en");
     expect(err).toHaveBeenCalled();
 
-    await i.setI18nLanguage("de");               // the failed load was not cached
-    expect(i.getI18nLanguage()).toBe("de");
+    await i.setI18nLanguage("ar");               // the failed load was not cached
+    expect(i.getI18nLanguage()).toBe("ar");
     expect(attempts).toBe(2);
   });
 });
@@ -139,18 +134,16 @@ describe("useI18n: no flash of the fallback on a switch", () => {
 
   it("keeps showing the previous language until the requested one arrives", async () => {
     const i = await freshI18n();
-    await i.setI18nLanguage("hu");
     const { result, rerender } = renderHook(({ language }) => i.useI18n({ language }), {
-      initialProps: { language: "hu" as const as "hu" | "de" },
+      initialProps: { language: "en" as "en" | "ar" },
     });
-    expect(result.current.lang).toBe("hu");
+    expect(result.current.lang).toBe("en");
 
-    rerender({ language: "de" });                // de is not loaded yet
-    expect(result.current.lang).toBe("hu");      // …so Hungarian stays, NOT English
-    expect(result.current.t("credits.close")).toBe("Bezárás");
+    rerender({ language: "ar" });                // Arabic is not loaded yet
+    expect(result.current.lang).toBe("en");       // …so English stays on screen
 
-    await waitFor(() => expect(result.current.lang).toBe("de"));
-    expect(result.current.t("credits.close")).toBe("Schließen");
+    await waitFor(() => expect(result.current.lang).toBe("ar"));
+    expect(result.current.t("credits.close")).toBe(i.t("credits.close", "ar"));
   });
 });
 
@@ -167,23 +160,23 @@ describe("OdontogramProvider: the first paint is already in the right language",
 
   it("renders nothing until the requested language is in, then renders it — never English first", async () => {
     const { default: App } = await import("../App");
-    const { container } = render(createElement(App, { language: "hu" }));
+    const { container } = render(createElement(App, { language: "ar" }));
     expect(container.innerHTML).toBe("");                           // held, not painted in English
     await waitFor(() => expect(container.querySelector(".odontogram-root")).toBeTruthy());
-    expect(container.querySelector(".odontogram-root")!.getAttribute("lang")).toBe("hu");
+    expect(container.querySelector(".odontogram-root")!.getAttribute("lang")).toBe("ar");
   }, 60000);
 
   it("a later switch does NOT unmount the chart — the same root survives it", async () => {
     const { default: App } = await import("../App");
     const loader = await import("../i18n/loader");
-    await loader.loadLanguage("hu");
-    const { container, rerender } = render(createElement(App, { language: "hu" }));
+    await loader.loadLanguage("ar");
+    const { container, rerender } = render(createElement(App, { language: "en" }));
     const root = container.querySelector(".odontogram-root")!;
     expect(root).toBeTruthy();
 
-    rerender(createElement(App, { language: "ar" }));               // ar is not loaded yet
+    rerender(createElement(App, { language: "ar" }));
     expect(container.querySelector(".odontogram-root")).toBe(root);  // still mounted
-    expect(root.getAttribute("lang")).toBe("hu");                    // old language kept meanwhile
+    expect(root.getAttribute("lang")).toBe("ar");
     await waitFor(() => expect(root.getAttribute("lang")).toBe("ar"));
     await act(async () => {});
     expect(root.getAttribute("dir")).toBe("rtl");

@@ -7,8 +7,8 @@ import { t } from "../../i18n/useI18n";
 
 describe("stable option labelKeys resolve (source language)", () => {
   const axes = ["toothSelection", "mobility", "periapicalType", "mods", "endo"];
-  it("every labelKey has a non-empty hu translation", () => {
+  it("every labelKey has a non-empty English translation", () => {
     for (const ax of axes) for (const o of optionsFor(ax))
-      expect(t(o.labelKey, "hu"), `${ax}:${o.labelKey}`).not.toBe(o.labelKey); // t() falls back to the key if missing
+      expect(t(o.labelKey, "en"), `${ax}:${o.labelKey}`).not.toBe(o.labelKey); // t() falls back to the key if missing
   });
 });

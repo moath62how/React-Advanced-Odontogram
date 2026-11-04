@@ -10,6 +10,7 @@
 // package = fully offline, never fetched from the network).
 import type { FontRegistrable } from "./roboto";
 import { shapeArabic } from "./arabicShaper";
+import type { Language } from "../i18n/languages";
 
 export interface PdfFont {
   /** jsPDF family name to pass to `doc.setFont(family, style)`. */
@@ -21,16 +22,12 @@ export interface PdfFont {
 }
 
 /** Load + describe the PDF font for `lang` (the active UI language code). */
-export async function loadPdfFont(lang: string): Promise<PdfFont> {
+export async function loadPdfFont(lang: Language): Promise<PdfFont> {
   if (lang === "ar") {
     const { registerArabicFont, PDF_FONT_ARABIC } = await import("./notoArabic");
     return { family: PDF_FONT_ARABIC, register: registerArabicFont, transform: shapeArabic };
   }
-  if (lang === "zh") {
-    const { registerCjkFont, PDF_FONT_CJK } = await import("./notoSC");
-    return { family: PDF_FONT_CJK, register: registerCjkFont, transform: (s) => s };
-  }
-  // hu, en, de, es, it, sk, pl, ru, pt-br, fr — Latin + Cyrillic.
+  // English uses the Latin font.
   const { registerRobotoFont, PDF_FONT_FAMILY } = await import("./roboto");
   return { family: PDF_FONT_FAMILY, register: registerRobotoFont, transform: (s) => s };
 }

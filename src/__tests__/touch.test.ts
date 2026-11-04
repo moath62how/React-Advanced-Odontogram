@@ -37,10 +37,10 @@ describe("Touch i18n keys", () => {
   });
 
   it("touch keys are consistent across all languages", () => {
-    const huKeys = TOUCH_KEYS.filter((k) => k in translations.hu);
+    const enKeys = TOUCH_KEYS.filter((k) => k in translations.en);
     for (const lang of LANGS) {
       const langKeys = TOUCH_KEYS.filter((k) => k in translations[lang]);
-      expect(langKeys).toEqual(huKeys);
+      expect(langKeys).toEqual(enKeys);
     }
   });
 });

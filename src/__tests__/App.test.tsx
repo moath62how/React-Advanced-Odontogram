@@ -4,6 +4,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor, cleanup, within } from '@testing-library/react';
 import App from '../App';
+import { setI18nLanguage } from '../i18n/useI18n';
 import {
   setSecondaryCariesMode,
   setIcdasEnabled,
@@ -194,6 +195,7 @@ describe('App.tsx', () => {
     cleanup();
     vi.clearAllMocks();
     document.documentElement.classList.remove('dark');
+    setI18nLanguage('en');
   });
 
   describe('standalone mode (no props)', () => {
@@ -259,13 +261,15 @@ describe('App.tsx', () => {
       const langButton = screen.getByRole('button', { name: /Language/i });
       fireEvent.click(langButton);
 
-      // Click on Hungarian option (text includes flag emoji)
+      expect(screen.getAllByRole('menuitemradio')).toHaveLength(2);
+
+      // Select Arabic from the supported language options.
       await waitFor(() => {
-        const huOption = screen.getByRole('menuitemradio', { name: /Hungarian/i });
-        fireEvent.click(huOption);
+        const arabicOption = screen.getByRole('menuitemradio', { name: /Arabic/i });
+        fireEvent.click(arabicOption);
       });
 
-      expect(onLangChange).toHaveBeenCalledWith('hu');
+      expect(onLangChange).toHaveBeenCalledWith('ar');
     });
   });
 

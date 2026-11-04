@@ -12,25 +12,15 @@ import { useEffect, useRef, useState } from "react";
 import { useOdontogramUi } from "../OdontogramContext";
 import { startIntroTour } from "../tour";
 import { setImportFormat } from "../odontogram";
-import type { Language } from "../i18n/languages";
+import { LANGUAGES } from "../i18n/languages";
 // Brand logo — `?inline` forces a base64 data URI so it is bundled into the
 // library (self-contained, no runtime asset fetch).
 import brandLogoUrl from "../assets/react-module-logo.png?inline";
 
-const LANGUAGE_OPTIONS: { value: Language; labelKey: string }[] = [
-  { value: "hu", labelKey: "language.hu" },
-  { value: "en", labelKey: "language.en" },
-  { value: "de", labelKey: "language.de" },
-  { value: "es", labelKey: "language.es" },
-  { value: "it", labelKey: "language.it" },
-  { value: "sk", labelKey: "language.sk" },
-  { value: "pl", labelKey: "language.pl" },
-  { value: "ru", labelKey: "language.ru" },
-  { value: "pt-br", labelKey: "language.pt-br" },
-  { value: "zh", labelKey: "language.zh" },
-  { value: "ar", labelKey: "language.ar" },
-  { value: "fr", labelKey: "language.fr" },
-];
+const LANGUAGE_OPTIONS = LANGUAGES.map((value) => ({
+  value,
+  labelKey: `language.${value}`,
+}));
 
 export default function OdontogramTopbar() {
   const {

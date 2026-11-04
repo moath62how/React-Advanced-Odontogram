@@ -38,9 +38,9 @@ describe("intro tour model", () => {
     expect(selectors).toContain("#openCaseDiagnosesBtn"); // case/regional diagnoses pop-up (2.5.0)
   });
 
-  it("has every tour i18n key in all 12 languages", () => {
+  it("has every tour i18n key in every supported language", () => {
     const langs = Object.keys(translations);
-    expect(langs).toHaveLength(12);
+    expect(langs).toEqual(["en", "ar"]);
     for (const lang of langs) {
       const table = translations[lang as keyof typeof translations];
       for (const s of TOUR_STEPS) {

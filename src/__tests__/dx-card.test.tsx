@@ -18,6 +18,7 @@
 // NOT `setDxOverrideForSelection(key,"add")`), and that `#diagnosesSection`
 // hides per `dx.visible`.
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import { LANGUAGES } from "../i18n/languages";
 import { createElement } from "react";
 import { render, cleanup, fireEvent } from "@testing-library/react";
 import { OdontogramProvider, ToothControlsSurface } from "../App";
@@ -215,7 +216,7 @@ describe("DX-2 Task 4: <DiagnosesCard/> renders declaratively", () => {
 // i18n-key-presence: `card.diagnoses`/`diagnoses.add`/`diagnoses.suppress`/
 // `diagnoses.added` and a `dx.<key>` label for every tooth-level diagnosis key
 // (DX_CODES minus the two summary-level keys `periodontitis`/`gingivitis`, i.e.
-// the same set `TOOTH_LEVEL_DX_KEYS` exposes) must exist in ALL 12 languages —
+// the same set `TOOTH_LEVEL_DX_KEYS` exposes) must exist in every supported language —
 // reads the REAL (unmocked) translations table directly, independent of the
 // `../../odontogram` mock above.
 describe("DX-2 Task 4: diagnoses i18n keys present in all languages", () => {
@@ -230,7 +231,7 @@ describe("DX-2 Task 4: diagnoses i18n keys present in all languages", () => {
   const CARD_KEYS = ["card.diagnoses", "diagnoses.add", "diagnoses.suppress", "diagnoses.added", "diagnoses.noCode",
     "diagnoses.excludeHint", "diagnoses.includeHint", "diagnoses.delete", "diagnoses.deleteHint"];
   const ALL_KEYS = [...CARD_KEYS, ...TOOTH_LEVEL_DX_KEYS.map((k) => `dx.${k}`)];
-  const ALL_LANGUAGES = ["hu", "en", "de", "es", "it", "sk", "pl", "ru", "pt-br", "zh", "ar", "fr"] as const;
+  const ALL_LANGUAGES = LANGUAGES;
 
   it("matches the real TOOTH_LEVEL_DX_KEYS set (DX_CODES minus periodontitis/gingivitis)", async () => {
     const { TOOTH_LEVEL_DX_KEYS: real } = await import("../odontogram");

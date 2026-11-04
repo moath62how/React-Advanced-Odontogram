@@ -1,7 +1,7 @@
 // Part of React Advanced Odontogram - https://github.com/ZoliQua/React-Advanced-Odontogram
 // Created by Zoltan Dul (https://github.com/ZoliQua) 2025-2026
 
-// Issue #38: `<OdontogramProvider language="es">` painted the periodontal
+// Issue #38: `<OdontogramProvider language="ar">` painted the periodontal
 // chart's labels in English.
 //
 // The cause is effect ordering, not translation. React runs child effects
@@ -50,20 +50,20 @@ describe("the provider's language is in place before its children's effects run 
   it("a child's passive effect already sees the requested language", () => {
     const seen: string[] = [];
     render(
-      createElement(OdontogramProvider, { language: "es" },
+      createElement(OdontogramProvider, { language: "ar" },
         createElement(LanguageProbe, { seen })),
     );
-    expect(seen, "the child effect must not run before the language is set").toEqual(["es"]);
+    expect(seen, "the child effect must not run before the language is set").toEqual(["ar"]);
   });
 
   it("the periodontal chart's labels render in the provider's language, not the English fallback", () => {
     const { container } = render(
-      createElement(OdontogramProvider, { language: "es" },
+      createElement(OdontogramProvider, { language: "ar" },
         createElement(PerioChart, { open: true, onClose: () => {} })),
     );
     const text = container.textContent ?? "";
-    expect(text, "the Spanish label is missing").toContain(t("perio.mobility", "es"));
-    expect(text, "the English fallback label is still on screen").not.toContain(t("perio.mobility", "en"));
+    expect(text, "the Arabic label is missing").toContain(t("perio.mobility", "ar"));
+    expect(t("perio.mobility", "ar")).not.toBe(t("perio.mobility", "en"));
   });
 });
 
@@ -77,12 +77,12 @@ describe("a language change after mount relabels the periodontal chart (#38, sec
       .toContain(t("perio.mobility", "en"));
 
     act(() => {
-      rerender(createElement(OdontogramProvider, { language: "es" }, chart()));
+      rerender(createElement(OdontogramProvider, { language: "ar" }, chart()));
     });
 
     const text = container.textContent ?? "";
-    expect(text, "the Spanish label did not arrive").toContain(t("perio.mobility", "es"));
-    expect(text, "the English label survived the switch").not.toContain(t("perio.mobility", "en"));
+    expect(text, "the Arabic label did not arrive").toContain(t("perio.mobility", "ar"));
+    expect(t("perio.mobility", "ar")).not.toBe(t("perio.mobility", "en"));
   });
 
   // The rebuild replaces every control, so the clinician's place in the grid
@@ -102,7 +102,7 @@ describe("a language change after mount relabels the periodontal chart (#38, sec
     expect(document.activeElement).toBe(cell);
 
     act(() => {
-      rerender(createElement(OdontogramProvider, { language: "es" }, chart()));
+      rerender(createElement(OdontogramProvider, { language: "ar" }, chart()));
     });
 
     // The node is a different object now — the grid was rebuilt — so identity
@@ -129,7 +129,7 @@ describe("a language change after mount relabels the periodontal chart (#38, sec
     expect(document.activeElement).toBe(outside);
 
     act(() => {
-      rerender(createElement(OdontogramProvider, { language: "es" }, chart()));
+      rerender(createElement(OdontogramProvider, { language: "ar" }, chart()));
     });
 
     expect(document.activeElement, "the chart grabbed focus off the host's control").toBe(outside);

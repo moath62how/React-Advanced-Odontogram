@@ -8,6 +8,7 @@
 import { describe, it, expect, afterEach, vi } from "vitest";
 import { render, screen, fireEvent, cleanup } from "@testing-library/react";
 import SettingsModal, { type SettingsState } from "../SettingsModal";
+import { LANGUAGES } from "../i18n/languages";
 
 afterEach(cleanup);
 
@@ -84,6 +85,27 @@ const renderModal = () =>
 
 const tabs = () => screen.getAllByRole("tab");
 const selectedTab = () => tabs().find((el) => el.getAttribute("aria-selected") === "true");
+
+describe("SettingsModal language options", () => {
+  it("only offers the supported UI languages", () => {
+    const onLanguage = vi.fn();
+    render(
+      <SettingsModal
+        open
+        onClose={vi.fn()}
+        t={t}
+        settings={{ ...settings, onLanguage }}
+      />,
+    );
+
+    const languageSelect = screen.getByRole("combobox", { name: "language.label" });
+    expect(Array.from((languageSelect as HTMLSelectElement).options, (option) => option.value))
+      .toEqual(LANGUAGES);
+
+    fireEvent.change(languageSelect, { target: { value: "ar" } });
+    expect(onLanguage).toHaveBeenCalledWith("ar");
+  });
+});
 
 describe("FIX 2: SettingsModal tablist keyboard navigation", () => {
   it("ArrowRight moves and activates the next tab (wrapping at the end)", () => {

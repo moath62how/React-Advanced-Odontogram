@@ -1,25 +1,42 @@
 
 :root{
-  --bg: var(--odon-bg, #f3f6fb);
-  --panel: var(--odon-panel, #ffffff);
-  --card: var(--odon-card, #ffffff);
-  --muted: var(--odon-muted, #5b6b7d);
-  --text: var(--odon-text, #1e2a3a);
-  --line: var(--odon-line, #d7e0ec);
-  --accent: var(--odon-accent, #3b7bff);
-  --accent2: var(--odon-accent2, #12b981);
+  --primary: #1976D2;
+  --primary-hover: #1565C0;
+  --primary-light: #E3F2FD;
+  --background: #FFFFFF;
+  --sidebar-background: #F5F5F5;
+  --card-background: #FFFFFF;
+  --muted-background: #F9F9F9;
+  --foreground: #0A0A0A;
+  --secondary-foreground: #39393B;
+  --muted-foreground: #737373;
+  --border: #E5E5E5;
+  --input-border: #E5E5E5;
+  --sidebar-active: #E3F2FD;
+  --sidebar-active-text: #1976D2;
+  --ring: #1976D2;
+  --radius: 0.75rem;
+  --primary-rgb: 25,118,210;
+  --bg: var(--odon-bg, var(--background));
+  --panel: var(--odon-panel, var(--background));
+  --card: var(--odon-card, var(--card-background));
+  --muted: var(--odon-muted, var(--muted-foreground));
+  --text: var(--odon-text, var(--foreground));
+  --line: var(--odon-line, var(--border));
+  --accent: var(--odon-accent, var(--primary));
+  --accent2: var(--odon-accent2, var(--primary));
 }
 /* When themeConfig is applied via JS, --odon-* properties are set on .odontogram-root.
    Re-resolve the shorthand variables so children pick up the overrides. */
 .odontogram-root{
-  --bg: var(--odon-bg, #f3f6fb);
-  --panel: var(--odon-panel, #ffffff);
-  --card: var(--odon-card, #ffffff);
-  --muted: var(--odon-muted, #5b6b7d);
-  --text: var(--odon-text, #1e2a3a);
-  --line: var(--odon-line, #d7e0ec);
-  --accent: var(--odon-accent, #3b7bff);
-  --accent2: var(--odon-accent2, #12b981);
+  --bg: var(--odon-bg, var(--background));
+  --panel: var(--odon-panel, var(--background));
+  --card: var(--odon-card, var(--card-background));
+  --muted: var(--odon-muted, var(--muted-foreground));
+  --text: var(--odon-text, var(--foreground));
+  --line: var(--odon-line, var(--border));
+  --accent: var(--odon-accent, var(--primary));
+  --accent2: var(--odon-accent2, var(--primary));
   color: var(--text);
 }
 .dark .odontogram-root{
@@ -47,7 +64,7 @@ body{
   position:sticky; top:0; z-index:10;
 }
 .brand{display:flex; gap:12px; align-items:center}
-.dot{width:10px;height:10px;border-radius:999px;background:var(--accent2); box-shadow:0 0 0 6px rgba(18,185,129,.12);}
+.dot{width:10px;height:10px;border-radius:999px;background:var(--accent2); box-shadow:0 0 0 6px rgba(var(--primary-rgb),.12);}
 .brand-logo{height:44px; width:auto; display:block; flex:0 0 auto;}
 .title{font-weight:700; letter-spacing:.2px}
 .subtitle{font-size:12px; color:var(--muted); margin-top:2px}
@@ -57,7 +74,7 @@ body{
 .btn{
   border:1px solid var(--line);
   color:var(--text);
-  background:rgba(59,123,255,.12);
+  background:rgba(var(--primary-rgb),.12);
   padding:8px 12px; border-radius:12px;
   cursor:pointer; font-weight:600;
 }
@@ -65,7 +82,7 @@ body{
   padding:6px 10px;
   font-size:12px;
 }
-.btn:hover{background:rgba(59,123,255,.18)}
+.btn:hover{background:rgba(var(--primary-rgb),.18)}
 .btn-ghost{background:rgba(0,0,0,.04)}
 .btn-ghost:hover{background:rgba(0,0,0,.08)}
 .btn-danger{
@@ -76,7 +93,7 @@ body{
 .btn-danger:hover{background: rgba(217,69,69,.2)}
 .btn-toggle[aria-pressed="true"]{
   background: rgb(100 15 235 / 20%);
-  border-color: rgba(18,185,129,.5);
+  border-color: rgba(var(--primary-rgb),.5);
 }
 .btn-toggle[aria-pressed="false"]{
   background: rgba(0,0,0,.04);
@@ -116,14 +133,14 @@ body{
 }
 .dropdown-item:disabled:hover{background: rgba(0,0,0,.04)}
 .dropdown-item[aria-checked="true"]{
-  background: rgba(59,123,255,.18);
-  border-color: rgba(59,123,255,.45);
+  background: rgba(var(--primary-rgb),.18);
+  border-color: rgba(var(--primary-rgb),.45);
 }
 
 select{
   appearance: none;
   border:1px solid var(--line);
-  background:rgba(59,123,255,.12);
+  background:rgba(var(--primary-rgb),.12);
   color:var(--text);
   padding:8px 34px 8px 12px;
   border-radius:12px;
@@ -141,7 +158,7 @@ select{
 }
 select:focus{
   outline:none;
-  box-shadow: 0 0 0 3px rgba(59,123,255,.18);
+  box-shadow: 0 0 0 3px rgba(var(--primary-rgb),.18);
 }
 
 .layout{
@@ -202,7 +219,7 @@ select:focus{
   font-size:13px;
   cursor:pointer;
 }
-.chart-mode-btn:hover{background: rgba(59,123,255,.14)}
+.chart-mode-btn:hover{background: rgba(var(--primary-rgb),.14)}
 .chart-mode-btn.is-active{
   background: var(--accent);
   color:#fff;
@@ -218,15 +235,15 @@ select:focus{
   font-size:11px;
   font-weight:700;
   letter-spacing:.4px;
-  background: rgba(59,123,255,.16);
+  background: rgba(var(--primary-rgb),.16);
   color: var(--accent);
-  border:1px solid rgba(59,123,255,.4);
+  border:1px solid rgba(var(--primary-rgb),.4);
 }
 /* Plan-mode visual cue on the chart card itself, so it's always obvious
    which chart (status vs. plan) is being edited. */
 .chart.plan-mode{
   border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(59,123,255,.18);
+  box-shadow: 0 0 0 2px rgba(var(--primary-rgb),.18);
 }
 
 /* R2-C Task 2: "dashed = proposed" legend. Always in the DOM (see App.tsx);
@@ -355,7 +372,7 @@ select:focus{
 .tooth-tile.placeholder .tooth-svg svg{
   opacity:0;
 }
-.tooth-tile:hover{background: rgba(59,123,255,.08)}
+.tooth-tile:hover{background: rgba(var(--primary-rgb),.08)}
 .tooth-tile:active{transform: scale(.99)}
 
 /* ── Selection animation ─────────────────────── */
@@ -402,7 +419,7 @@ select:focus{
 .tooth-tile:focus-visible{
   outline: 2px solid var(--accent);
   outline-offset: 2px;
-  box-shadow: 0 0 0 3px rgba(59,123,255,.25);
+  box-shadow: 0 0 0 3px rgba(var(--primary-rgb),.25);
   z-index: 1;
 }
 
@@ -446,11 +463,11 @@ select:focus{
 @media (prefers-reduced-motion: reduce){
   .tooth-tile.active::after{
     animation: none;
-    border-color: rgba(59,123,255,.7);
+    border-color: rgba(var(--primary-rgb),.7);
   }
   .tooth-tile.active .tooth-svg svg{
     animation: none;
-    filter: drop-shadow(0 0 4px rgba(59,123,255,.35));
+    filter: drop-shadow(0 0 4px rgba(var(--primary-rgb),.35));
   }
 }
 .tooth-svg{
@@ -551,8 +568,8 @@ select:focus{
 .panel-subtitle{font-size:12px;color:var(--muted); margin-top:4px}
 .pill{
   display:inline-block;
-  background: rgba(18,185,129,.14);
-  border:1px solid rgba(18,185,129,.25);
+  background: rgba(var(--primary-rgb),.14);
+  border:1px solid rgba(var(--primary-rgb),.25);
   padding:2px 8px;
   border-radius:999px;
   font-weight:700;
@@ -593,7 +610,7 @@ select:focus{
   line-height:1;
 }
 .icon-btn .icon{width:16px;height:16px}
-.icon-btn:hover{background: rgba(59,123,255,.12)}
+.icon-btn:hover{background: rgba(var(--primary-rgb),.12)}
 .icon-btn-danger{
   color:#d94545;
   border-color: rgba(217,69,69,.4);
@@ -616,27 +633,27 @@ select:focus{
    periapical-type .row, not an .inline-checks, so the rule above never matches). */
 #calculusRow{margin-top:8px}
 .inline-checks label{display:flex; gap:10px; align-items:center; font-size:13px; padding:6px 10px; border-radius:12px; border:1px solid var(--line); background: rgba(0,0,0,.02); cursor:pointer}
-.inline-checks label:hover{background: rgba(59,123,255,.06)}
+.inline-checks label:hover{background: rgba(var(--primary-rgb),.06)}
 .inline-checks input[type="checkbox"]{display:none}
 .inline-checks label:has(input[type="checkbox"]:checked){
-  background: rgba(18,185,129,.18);
-  border-color: rgba(18,185,129,.5);
+  background: rgba(var(--primary-rgb),.18);
+  border-color: rgba(var(--primary-rgb),.5);
 }
 .check-grid{display:grid; grid-template-columns: 1fr 1fr; gap:8px}
 .check-grid label{display:flex; gap:10px; align-items:center; font-size:13px; padding:6px 8px; border-radius:12px; border:1px solid var(--line); background: rgba(0,0,0,.02); cursor:pointer}
-.check-grid label:hover{background: rgba(59,123,255,.06)}
+.check-grid label:hover{background: rgba(var(--primary-rgb),.06)}
 .check-grid input[type="checkbox"]{display:none}
 .check-grid label:has(input[type="checkbox"]:checked){
-  background: rgba(18,185,129,.18);
-  border-color: rgba(18,185,129,.5);
+  background: rgba(var(--primary-rgb),.18);
+  border-color: rgba(var(--primary-rgb),.5);
 }
 .surface-cross{display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:repeat(3,auto); gap:8px; max-width:340px; margin:4px auto}
 .surface-cross .surface-cell{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; text-align:center; padding:10px 6px; border-radius:14px; border:1px solid var(--line); background:rgba(0,0,0,.02); cursor:pointer}
-.surface-cross .surface-cell:hover{background:rgba(59,123,255,.06)}
+.surface-cross .surface-cell:hover{background:rgba(var(--primary-rgb),.06)}
 .surface-cross .surface-cell input[type="checkbox"]{display:none}
 .surface-cross .surface-cell .surf-letter{font-weight:700; font-size:18px; line-height:1}
 .surface-cross .surface-cell .surf-name{font-size:11px; color:var(--muted)}
-.surface-cross .surface-cell:has(input[type="checkbox"]:checked){background:rgba(18,185,129,.18); border-color:rgba(18,185,129,.5)}
+.surface-cross .surface-cell:has(input[type="checkbox"]:checked){background:rgba(var(--primary-rgb),.18); border-color:rgba(var(--primary-rgb),.5)}
 .surface-cross .pos-buccal{grid-column:2; grid-row:1}
 .surface-cross .pos-mesial{grid-column:1; grid-row:2}
 .surface-cross .pos-occlusal{grid-column:2; grid-row:2}
@@ -697,8 +714,8 @@ select:focus{
    vertically like every other option group in this popup family. */
 .odon-depth-group{display:flex; flex-direction:column; gap:4px}
 .odon-depth-option{border:1px solid var(--line); background:rgba(0,0,0,.04); color:var(--text); padding:8px 10px; border-radius:10px; font-weight:600; cursor:pointer; text-align:start; font-size:13px}
-.odon-depth-option:hover{background:rgba(59,123,255,.12)}
-.odon-depth-option.is-active{border-color:var(--accent,#3b7bff); background:rgba(59,123,255,.16)}
+.odon-depth-option:hover{background:rgba(var(--primary-rgb),.12)}
+.odon-depth-option.is-active{border-color:var(--accent,var(--primary)); background:rgba(var(--primary-rgb),.16)}
 .odon-depth-group-label{font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--muted,#7b8794); padding:6px 4px 2px}
 .odon-depth-group-label:first-child{padding-top:2px}
 .odon-depth-title{font-size:12px; font-weight:800; color:var(--text); padding:2px 4px 6px; border-bottom:1px solid var(--line); margin-bottom:2px}
@@ -740,8 +757,8 @@ select:focus{
   padding:0;
 }
 .row:has(input[type="checkbox"]:checked){
-  background: rgba(18,185,129,.18);
-  border-color: rgba(18,185,129,.5);
+  background: rgba(var(--primary-rgb),.18);
+  border-color: rgba(var(--primary-rgb),.5);
 }
 .inline-checks:has(input[type="checkbox"]:checked){
   background:none;
@@ -762,7 +779,7 @@ select:focus{
 }
 .radio-list{display:flex; flex-direction:column; gap:8px}
 .radio-list label{display:flex; gap:10px; align-items:center; font-size:13px; padding:6px 8px; border-radius:12px; border:1px solid var(--line); background: rgba(0,0,0,.02)}
-.radio-list label:hover{background: rgba(59,123,255,.06)}
+.radio-list label:hover{background: rgba(var(--primary-rgb),.06)}
 .divider{height:1px;background:var(--line); margin:10px 0}
 
 /* SP-perio P1 Task 2: minimal, deliberately plain 6-site PD/GM/BOP/SUP grid
@@ -907,9 +924,9 @@ select:focus{
   backdrop-filter: blur(10px);
 }
 .dark .btn{
-  background: rgba(96,165,250,.15);
+  background: rgba(var(--primary-rgb),.15);
 }
-.dark .btn:hover{background: rgba(96,165,250,.25)}
+.dark .btn:hover{background: rgba(var(--primary-rgb),.25)}
 .dark .btn-ghost{background: rgba(255,255,255,.06)}
 .dark .btn-ghost:hover{background: rgba(255,255,255,.12)}
 .dark .btn-danger{
@@ -926,11 +943,11 @@ select:focus{
 .dark .dropdown-item{background: rgba(255,255,255,.06)}
 .dark .dropdown-item:hover{background: rgba(255,255,255,.12)}
 .dark .dropdown-item[aria-checked="true"]{
-  background: rgba(96,165,250,.2);
-  border-color: rgba(96,165,250,.45);
+  background: rgba(var(--primary-rgb),.2);
+  border-color: rgba(var(--primary-rgb),.45);
 }
 .dark select{
-  background: rgba(96,165,250,.15);
+  background: rgba(var(--primary-rgb),.15);
   background-image:
     linear-gradient(45deg, transparent 50%, var(--text) 50%),
     linear-gradient(135deg, var(--text) 50%, transparent 50%);
@@ -946,62 +963,62 @@ select:focus{
   border-color: var(--line);
 }
 .dark .chart-mode-btn{color: var(--text)}
-.dark .chart-mode-btn:hover{background: rgba(96,165,250,.18)}
+.dark .chart-mode-btn:hover{background: rgba(var(--primary-rgb),.18)}
 .dark .chart-mode-btn.is-active{
-  background: rgba(96,165,250,.45);
+  background: rgba(var(--primary-rgb),.45);
   color:#fff;
 }
-.dark .chart-mode-btn.is-active:hover{background: rgba(96,165,250,.45)}
+.dark .chart-mode-btn.is-active:hover{background: rgba(var(--primary-rgb),.45)}
 .dark .plan-badge{
-  background: rgba(96,165,250,.18);
+  background: rgba(var(--primary-rgb),.18);
   color:#93c5fd;
-  border-color: rgba(96,165,250,.45);
+  border-color: rgba(var(--primary-rgb),.45);
 }
 .dark .chart.plan-mode{
-  border-color: rgba(96,165,250,.6);
-  box-shadow: 0 0 0 2px rgba(96,165,250,.28);
+  border-color: rgba(var(--primary-rgb),.6);
+  box-shadow: 0 0 0 2px rgba(var(--primary-rgb),.28);
 }
 .dark .proposed-legend{color: var(--text)}
-.dark .proposed-legend-swatch{border-top-color: rgba(96,165,250,.85)}
+.dark .proposed-legend-swatch{border-top-color: rgba(var(--primary-rgb),.85)}
 .dark .tooth-label-cell{color: rgba(241,245,249,.6)}
 .dark .tooth-label-cell:hover{color: rgba(241,245,249,1)}
 .dark .tooth-tile{background: rgba(30,41,59,.7)}
 .dark .tooth-tile.placeholder{background: rgba(30,41,59,.3)}
-.dark .tooth-tile:hover{background: rgba(96,165,250,.12)}
+.dark .tooth-tile:hover{background: rgba(var(--primary-rgb),.12)}
 /* Dark selection animation */
 @keyframes odon-dash-pulse-dark{
-  0%, 100%{ border-color: rgba(96,165,250,.45); }
-  50%{ border-color: rgba(96,165,250,.85); }
+  0%, 100%{ border-color: rgba(var(--primary-rgb),.45); }
+  50%{ border-color: rgba(var(--primary-rgb),.85); }
 }
 @keyframes odon-glow-pulse-dark{
-  0%, 100%{ filter: drop-shadow(0 0 3px rgba(96,165,250,.2)); }
-  50%{ filter: drop-shadow(0 0 7px rgba(96,165,250,.45)); }
+  0%, 100%{ filter: drop-shadow(0 0 3px rgba(var(--primary-rgb),.2)); }
+  50%{ filter: drop-shadow(0 0 7px rgba(var(--primary-rgb),.45)); }
 }
 .dark .tooth-tile.active{
-  border-color: rgba(96,165,250,.6);
-  background: rgba(96,165,250,.08);
+  border-color: rgba(var(--primary-rgb),.6);
+  background: rgba(var(--primary-rgb),.08);
 }
 .dark .tooth-tile.active::after{
-  border-color: rgba(96,165,250,.45);
+  border-color: rgba(var(--primary-rgb),.45);
   animation-name: odon-dash-pulse-dark;
 }
 .dark .tooth-tile.active .tooth-svg svg{
   animation-name: odon-glow-pulse-dark;
-  filter: drop-shadow(0 0 4px rgba(96,165,250,.3));
+  filter: drop-shadow(0 0 4px rgba(var(--primary-rgb),.3));
 }
 .dark .tooth-tile:focus-visible{
-  outline-color: rgba(96,165,250,.8);
-  box-shadow: 0 0 0 3px rgba(96,165,250,.25);
+  outline-color: rgba(var(--primary-rgb),.8);
+  box-shadow: 0 0 0 3px rgba(var(--primary-rgb),.25);
 }
 /* Dark note popover */
 .dark .odon-note-backdrop{background: rgba(0,0,0,.55)}
 .dark .odon-note-popover{background: var(--panel); box-shadow: 0 16px 48px rgba(0,0,0,.5)}
 .dark .odon-note-textarea{background: rgba(255,255,255,.06); border-color: var(--line); color: var(--text)}
-.dark .odon-note-textarea:focus{box-shadow: 0 0 0 3px rgba(96,165,250,.2); border-color: rgba(96,165,250,.5)}
+.dark .odon-note-textarea:focus{box-shadow: 0 0 0 3px rgba(var(--primary-rgb),.2); border-color: rgba(var(--primary-rgb),.5)}
 .dark .panel{background: rgba(30,41,59,.95)}
 .dark .card{background: rgba(30,41,59,.8); border-color: var(--line)}
 .dark .icon-btn{background: rgba(30,41,59,.7)}
-.dark .icon-btn:hover{background: rgba(96,165,250,.15)}
+.dark .icon-btn:hover{background: rgba(var(--primary-rgb),.15)}
 .dark .icon-btn-danger{
   color:#f87171;
   border-color: rgba(248,113,113,.3);
@@ -1018,7 +1035,7 @@ select:focus{
 .dark .radio-list label{background: rgba(255,255,255,.04)}
 .dark .inline-checks label:hover,
 .dark .check-grid label:hover,
-.dark .radio-list label:hover{background: rgba(96,165,250,.1)}
+.dark .radio-list label:hover{background: rgba(var(--primary-rgb),.1)}
 .dark .row:has(input[type="checkbox"]){background: rgba(255,255,255,.04)}
 .dark .pill{
   background: rgba(52,211,153,.15);
@@ -1039,9 +1056,9 @@ select:focus{
   cursor:pointer;
   transition: background .15s ease;
 }
-.btn-theme:hover{background: rgba(59,123,255,.12)}
+.btn-theme:hover{background: rgba(var(--primary-rgb),.12)}
 .dark .btn-theme{background: rgba(255,255,255,.06)}
-.dark .btn-theme:hover{background: rgba(96,165,250,.15)}
+.dark .btn-theme:hover{background: rgba(var(--primary-rgb),.15)}
 
 /* ── Note icon in label cell ─────────────────── */
 .tooth-note-icon{
@@ -1093,8 +1110,8 @@ select:focus{
 }
 .odon-note-textarea:focus{
   outline: none;
-  box-shadow: 0 0 0 3px rgba(59,123,255,.18);
-  border-color: rgba(59,123,255,.5);
+  box-shadow: 0 0 0 3px rgba(var(--primary-rgb),.18);
+  border-color: rgba(var(--primary-rgb),.5);
 }
 .odon-note-textarea::placeholder{
   color: var(--muted);
@@ -1177,7 +1194,7 @@ select:focus{
 }
 .odon-zoom-btn{
   border:1px solid var(--line);
-  background: rgba(59,123,255,.08);
+  background: rgba(var(--primary-rgb),.08);
   color:var(--text);
   padding:10px 8px;
   border-radius:12px;
@@ -1186,10 +1203,10 @@ select:focus{
   cursor:pointer;
   text-align:center;
 }
-.odon-zoom-btn:hover{background: rgba(59,123,255,.18)}
+.odon-zoom-btn:hover{background: rgba(var(--primary-rgb),.18)}
 .odon-zoom-btn.active{
-  background: rgba(18,185,129,.18);
-  border-color: rgba(18,185,129,.5);
+  background: rgba(var(--primary-rgb),.18);
+  border-color: rgba(var(--primary-rgb),.5);
 }
 .odon-zoom-btn.danger{
   background: rgba(217,69,69,.08);
@@ -1223,7 +1240,7 @@ select:focus{
   cursor:pointer;
   text-align:start;
 }
-.odon-ctx-item:hover{background: rgba(59,123,255,.1)}
+.odon-ctx-item:hover{background: rgba(var(--primary-rgb),.1)}
 .odon-ctx-item.danger{color:#b83a3a}
 .odon-ctx-item.danger:hover{background: rgba(217,69,69,.12)}
 .odon-ctx-divider{height:1px;background:var(--line);margin:2px 0}
@@ -1233,13 +1250,13 @@ select:focus{
 .dark .odon-zoom-popover{background: var(--panel); box-shadow: 0 20px 60px rgba(0,0,0,.5)}
 .dark .odon-zoom-close{background: rgba(255,255,255,.06)}
 .dark .odon-zoom-close:hover{background: rgba(248,113,113,.15); color:#f87171}
-.dark .odon-zoom-btn{background: rgba(96,165,250,.1)}
-.dark .odon-zoom-btn:hover{background: rgba(96,165,250,.2)}
+.dark .odon-zoom-btn{background: rgba(var(--primary-rgb),.1)}
+.dark .odon-zoom-btn:hover{background: rgba(var(--primary-rgb),.2)}
 .dark .odon-zoom-btn.active{background: rgba(52,211,153,.18); border-color: rgba(52,211,153,.4)}
 .dark .odon-zoom-btn.danger{background: rgba(248,113,113,.1); border-color: rgba(248,113,113,.25); color:#f87171}
 .dark .odon-ctx-menu{background: var(--panel); box-shadow: 0 12px 40px rgba(0,0,0,.5)}
 .dark .odon-ctx-item{background: rgba(255,255,255,.04)}
-.dark .odon-ctx-item:hover{background: rgba(96,165,250,.12)}
+.dark .odon-ctx-item:hover{background: rgba(var(--primary-rgb),.12)}
 .dark .odon-ctx-item.danger{color:#f87171}
 
 /* Pinch-to-zoom on grid */
@@ -1294,11 +1311,11 @@ select:focus{
   text-align:center;
 }
 .odon-arch-toggle .odon-arch-btn.active{
-  background: rgba(59,123,255,.18);
-  border-color: rgba(59,123,255,.45);
+  background: rgba(var(--primary-rgb),.18);
+  border-color: rgba(var(--primary-rgb),.45);
 }
 .dark .odon-arch-toggle .odon-arch-btn{background: rgba(255,255,255,.06)}
-.dark .odon-arch-toggle .odon-arch-btn.active{background: rgba(96,165,250,.2); border-color: rgba(96,165,250,.45)}
+.dark .odon-arch-toggle .odon-arch-btn.active{background: rgba(var(--primary-rgb),.2); border-color: rgba(var(--primary-rgb),.45)}
 @media (max-width: 600px){
   .odon-arch-toggle{display:flex}
   .tooth-grid.odon-arch-upper .lower-row,
@@ -1313,7 +1330,7 @@ select:focus{
 .odon-export-pct{font-weight:800; font-size:40px; line-height:1; color:var(--text)}
 .odon-export-phase{font-size:12px; color:var(--muted); margin-top:8px}
 .odon-tour-backdrop{position:fixed; inset:0; z-index:140; background:rgba(20,28,40,.45)}
-.odon-tour-highlight{position:fixed; z-index:141; border:3px solid var(--accent,#3b7bff); border-radius:12px; box-shadow:0 0 0 9999px rgba(20,28,40,.45); pointer-events:none; transition:all .15s ease}
+.odon-tour-highlight{position:fixed; z-index:141; border:3px solid var(--accent,var(--primary)); border-radius:12px; box-shadow:0 0 0 9999px rgba(20,28,40,.45); pointer-events:none; transition:all .15s ease}
 .odon-tour-card{position:fixed; z-index:142; background:var(--panel); border-radius:16px; box-shadow:0 16px 48px rgba(30,42,58,.25); padding:18px 20px; width:300px}
 .odon-tour-card-center{top:50%; left:50%; transform:translate(-50%,-50%)}
 .odon-tour-counter{font-size:11px; color:var(--muted); margin-bottom:6px}
@@ -1323,7 +1340,7 @@ select:focus{
 .odon-tour-btn{border:1px solid var(--line); background:rgba(0,0,0,.04); color:var(--text); padding:6px 12px; border-radius:10px; font-weight:600; cursor:pointer}
 .odon-tour-btn:disabled{opacity:.4; cursor:default}
 .odon-tour-skip{margin-right:auto; background:transparent}
-.odon-tour-next{background:rgba(59,123,255,.18); border-color:rgba(59,123,255,.45)}
+.odon-tour-next{background:rgba(var(--primary-rgb),.18); border-color:rgba(var(--primary-rgb),.45)}
 .caries-deep path, .caries-deep circle, .caries-deep ellipse { stroke: #b3261e; stroke-width: .5px; }
 .settings-menu{min-width:200px}
 .settings-group-label{font-size:11px; color:var(--muted); font-weight:700; padding:4px 8px 2px}
@@ -1359,8 +1376,8 @@ select:focus{
 .tooth-info-table-wrap{margin:0 0 8px; overflow-x:auto}
 .tooth-info-table{border-collapse:collapse; width:100%; font-size:12px; line-height:1.4; color:var(--text)}
 .tooth-info-table th,.tooth-info-table td{border:1px solid var(--line); padding:3px 6px; text-align:left; vertical-align:top}
-.tooth-info-table thead th{background:rgba(59,123,255,.12); color:var(--text); font-weight:700; font-size:11px; white-space:nowrap}
-.tooth-info-table tbody th{background:rgba(59,123,255,.08); color:var(--text); font-weight:700; white-space:nowrap}
+.tooth-info-table thead th{background:rgba(var(--primary-rgb),.12); color:var(--text); font-weight:700; font-size:11px; white-space:nowrap}
+.tooth-info-table tbody th{background:rgba(var(--primary-rgb),.08); color:var(--text); font-weight:700; white-space:nowrap}
 .tooth-info-table tbody tr:nth-child(even) td{background:rgba(127,127,127,.08)}
 .tooth-cell{white-space:nowrap}
 .tooth-cell-content{font-weight:700; color:var(--accent)}
@@ -1379,14 +1396,14 @@ select:focus{
   margin-top:10px;
   padding:8px 10px;
   border-radius:12px;
-  background: rgba(59,123,255,.08);
-  border:1px solid rgba(59,123,255,.35);
+  background: rgba(var(--primary-rgb),.08);
+  border:1px solid rgba(var(--primary-rgb),.35);
 }
 .planned-changes .tooth-info-heading{margin-bottom:4px}
 .planned-changes-item{margin:4px 0 0; font-size:13px; line-height:1.5}
 .dark .planned-changes{
-  background: rgba(96,165,250,.12);
-  border-color: rgba(96,165,250,.4);
+  background: rgba(var(--primary-rgb),.12);
+  border-color: rgba(var(--primary-rgb),.4);
 }
 
 /* ── Settings modal ──────────────────────────── */
@@ -1427,7 +1444,7 @@ select:focus{
 }
 .odon-settings-close:hover{ background: rgba(0,0,0,.08); }
 .odon-settings-close:focus-visible{
-  outline: none; box-shadow: 0 0 0 3px rgba(59,123,255,.35);
+  outline: none; box-shadow: 0 0 0 3px rgba(var(--primary-rgb),.35);
 }
 .odon-settings-body{
   display: flex; min-height: 0; flex: 1;
@@ -1448,14 +1465,14 @@ select:focus{
 }
 .odon-settings-tab:hover{ background: rgba(0,0,0,.04); color: var(--text); }
 .odon-settings-tab.is-active{
-  background: rgba(59,123,255,.14);
-  border-color: rgba(59,123,255,.35);
+  background: rgba(var(--primary-rgb),.14);
+  border-color: rgba(var(--primary-rgb),.35);
   color: var(--text);
 }
 .odon-settings-tab.is-disabled{ opacity: .45; cursor: not-allowed; }
 .odon-settings-tab.is-disabled:hover{ background: transparent; color: var(--muted); }
 .odon-settings-tab:focus-visible{
-  outline: none; box-shadow: 0 0 0 3px rgba(59,123,255,.30);
+  outline: none; box-shadow: 0 0 0 3px rgba(var(--primary-rgb),.30);
 }
 .odon-settings-panel{
   flex: 1; min-width: 0;
@@ -1484,7 +1501,7 @@ select:focus{
 .odon-settings-badge{
   display: inline-block; margin-inline-start: 6px;
   padding: 1px 7px; border-radius: 999px;
-  background: rgba(59,123,255,.14); color: var(--accent, #3b7bff);
+  background: rgba(var(--primary-rgb),.14); color: var(--accent, var(--primary));
   font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em;
   vertical-align: middle;
 }
@@ -1496,13 +1513,13 @@ select:focus{
   font-size: 13px; font-family: inherit;
 }
 .odon-settings-select:focus-visible{
-  outline: none; box-shadow: 0 0 0 3px rgba(59,123,255,.30); border-color: rgba(59,123,255,.5);
+  outline: none; box-shadow: 0 0 0 3px rgba(var(--primary-rgb),.30); border-color: rgba(var(--primary-rgb),.5);
 }
 .odon-settings-select:disabled{ opacity: .5; cursor: not-allowed; }
 /* Round 2 (Stage 7): intro note at the top of the Export Settings tab. */
 .odon-settings-note{
   margin: 0 0 10px; padding: 8px 12px; border-radius: 10px;
-  background: rgba(59,123,255,.10); color: var(--text);
+  background: rgba(var(--primary-rgb),.10); color: var(--text);
   font-size: 12px; line-height: 1.45;
 }
 .odon-settings-input{
@@ -1515,7 +1532,7 @@ select:focus{
 .odon-settings-input[type="color"]{ min-width: 52px; width: 52px; padding: 2px; height: 32px; cursor: pointer; }
 .odon-settings-input:disabled{ opacity: .5; cursor: not-allowed; }
 .odon-settings-input:focus-visible{
-  outline: none; box-shadow: 0 0 0 3px rgba(59,123,255,.30); border-color: rgba(59,123,255,.5);
+  outline: none; box-shadow: 0 0 0 3px rgba(var(--primary-rgb),.30); border-color: rgba(var(--primary-rgb),.5);
 }
 .odon-settings-textarea{
   min-width: 240px; max-width: 100%; width: 240px; resize: vertical;
@@ -1526,7 +1543,7 @@ select:focus{
 }
 .odon-settings-textarea:disabled{ opacity: .5; cursor: not-allowed; }
 .odon-settings-textarea:focus-visible{
-  outline: none; box-shadow: 0 0 0 3px rgba(59,123,255,.30); border-color: rgba(59,123,255,.5);
+  outline: none; box-shadow: 0 0 0 3px rgba(var(--primary-rgb),.30); border-color: rgba(var(--primary-rgb),.5);
 }
 .odon-settings-switch{
   position: relative; display: inline-flex; align-items: center;
@@ -1547,13 +1564,13 @@ select:focus{
   transition: transform .15s ease;
 }
 .odon-settings-switch input:checked + .odon-settings-switch-track{
-  background: var(--accent, #3b7bff);
+  background: var(--accent, var(--primary));
 }
 .odon-settings-switch input:checked + .odon-settings-switch-track::after{
   transform: translateX(18px);
 }
 .odon-settings-switch input:focus-visible + .odon-settings-switch-track{
-  box-shadow: 0 0 0 3px rgba(59,123,255,.30);
+  box-shadow: 0 0 0 3px rgba(var(--primary-rgb),.30);
 }
 .dark .odon-settings-close{ background: rgba(255,255,255,.06); }
 .dark .odon-settings-close:hover{ background: rgba(255,255,255,.12); }
@@ -1604,14 +1621,14 @@ select:focus{
   cursor: pointer;
 }
 .odon-confirm-btn:focus-visible{
-  outline: none; box-shadow: 0 0 0 3px rgba(59,123,255,.35);
+  outline: none; box-shadow: 0 0 0 3px rgba(var(--primary-rgb),.35);
 }
 .odon-confirm-cancel{
   background: rgba(0,0,0,.04); color: var(--text);
 }
 .odon-confirm-cancel:hover{ background: rgba(0,0,0,.08); }
 .odon-confirm-accept{
-  background: var(--brand, #3b7bff); color: #fff; border-color: transparent;
+  background: var(--brand, var(--primary)); color: #fff; border-color: transparent;
 }
 .odon-confirm-accept:hover{ filter: brightness(1.05); }
 .dark .odon-confirm-cancel{ background: rgba(255,255,255,.06); }
@@ -1655,7 +1672,7 @@ select:focus{
 }
 .odon-credits-libs li{ display: inline-flex; }
 .odon-credits-link{
-  color: var(--brand, #3b7bff); font-weight: 600; text-decoration: none;
+  color: var(--brand, var(--primary)); font-weight: 600; text-decoration: none;
 }
 .odon-credits-link:hover{ text-decoration: underline; }
 .odon-credits-welcome{
@@ -1673,7 +1690,7 @@ select:focus{
 .odon-credits-star svg{ opacity: .75; }
 .odon-credits-star:hover{ background: rgba(0,0,0,.05); border-color: var(--text); }
 .dark .odon-credits-star:hover{ background: rgba(255,255,255,.08); }
-.odon-credits-star:focus-visible{ outline: none; box-shadow: 0 0 0 3px rgba(59,123,255,.35); }
+.odon-credits-star:focus-visible{ outline: none; box-shadow: 0 0 0 3px rgba(var(--primary-rgb),.35); }
 
 /* P2 Task 1: perio-chart overlay shell. Full-screen, layered ABOVE the
    odontogram (which it never unmounts) — higher z-index than every other
@@ -1716,7 +1733,7 @@ select:focus{
 }
 .perio-overlay-close:hover{ background: rgba(0,0,0,.08); }
 .perio-overlay-close:focus-visible{
-  outline: none; box-shadow: 0 0 0 3px rgba(59,123,255,.35);
+  outline: none; box-shadow: 0 0 0 3px rgba(var(--primary-rgb),.35);
 }
 .perio-overlay-body{
   flex: 1; min-height: 240px;
@@ -1804,7 +1821,7 @@ select:focus{
 .case-meta-panel-title:hover{ background: rgba(0,0,0,.03); }
 .dark .case-meta-panel-title:hover{ background: rgba(255,255,255,.04); }
 .case-meta-panel-title:focus-visible{
-  outline: none; box-shadow: inset 0 0 0 3px rgba(59,123,255,.30);
+  outline: none; box-shadow: inset 0 0 0 3px rgba(var(--primary-rgb),.30);
 }
 .case-meta-panel-body{
   padding: 2px 12px 14px;
@@ -1832,7 +1849,7 @@ select:focus{
 }
 .case-meta-input:focus-visible,
 .case-meta-select:focus-visible{
-  outline: none; box-shadow: 0 0 0 3px rgba(59,123,255,.30); border-color: rgba(59,123,255,.5);
+  outline: none; box-shadow: 0 0 0 3px rgba(var(--primary-rgb),.30); border-color: rgba(var(--primary-rgb),.5);
 }
 .case-meta-input-narrow{ width: 72px; }
 .dark .case-meta-input,
@@ -1906,7 +1923,7 @@ select:focus{
   opacity: 0.85;
 }
 .perio-curve-band{
-  fill: #3b82f6; /* blue, semi-transparent pocket band (reference style) */
+  fill: var(--primary); /* blue, semi-transparent pocket band (reference style) */
   fill-opacity: 0.18;
   stroke: none;
 }
@@ -1988,13 +2005,13 @@ select:focus{
   cursor: pointer;
   line-height: 1.4;
 }
-.perio-overlay-switch-btn:hover{ border-color: var(--accent, #3b82f6); }
+.perio-overlay-switch-btn:hover{ border-color: var(--accent, var(--primary)); }
 .perio-overlay-switch-btn.is-active{
-  background: var(--accent, #3b82f6);
-  border-color: var(--accent, #3b82f6);
+  background: var(--accent, var(--primary));
+  border-color: var(--accent, var(--primary));
   color: #fff;
 }
-.perio-overlay-switch-btn:focus-visible{ outline: 2px solid var(--accent, #3b82f6); outline-offset: 1px; }
+.perio-overlay-switch-btn:focus-visible{ outline: 2px solid var(--accent, var(--primary)); outline-offset: 1px; }
 .perio-overlay-readout{
   margin-inline-start: 6px;
   font-size: 12px;
@@ -2089,14 +2106,14 @@ select:focus{
   cursor: pointer;
 }
 .perio-info-btn:hover{
-  border-color: var(--accent, #3b7bff);
-  color: var(--accent, #3b7bff);
+  border-color: var(--accent, var(--primary));
+  color: var(--accent, var(--primary));
 }
 .perio-info-btn:focus-visible{
   outline: none;
-  border-color: var(--accent, #3b7bff);
-  color: var(--accent, #3b7bff);
-  box-shadow: 0 0 0 2px rgba(59,123,255,.35);
+  border-color: var(--accent, var(--primary));
+  color: var(--accent, var(--primary));
+  box-shadow: 0 0 0 2px rgba(var(--primary-rgb),.35);
 }
 /* Layered above the perio-overlay dialog (z-index 160) so it is never hidden
    behind the perio chart chrome it annotates, but BELOW the DS-1 confirm

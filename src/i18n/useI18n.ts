@@ -41,8 +41,8 @@ export function getI18nLanguage(): Language {
 // The language the most recent setI18nLanguage() call is switching TO, and a
 // monotonic request token: loading a language is async, so a second switch can
 // arrive while the first is still downloading, and whoever asked LAST must win.
-// (Same shape as setToothAnatomy's — without the token, "hu" then "en" issued
-// during the "hu" download ended on Hungarian.)
+// (Same shape as setToothAnatomy's — without the token, "ar" then "en" issued
+// during the Arabic download ended on Arabic.)
 let languageRequest = 0;
 let pendingLanguage: Language | null = null;
 
@@ -124,7 +124,7 @@ export function useI18n(options: UseI18nOptions = {}){
   // imperatively in a passive effect and resolve their labels through the
   // module-level `t()`, which reads the GLOBAL language. As a passive effect
   // this one ran after them, so those labels were built against the English
-  // fallback and never rebuilt: `<OdontogramProvider language="es">` painted
+  // fallback and never rebuilt: `<OdontogramProvider language="ar">` painted
   // the perio chart in English. Setting the language in a layout effect puts
   // it in place before any child's passive effect can read it.
   //
