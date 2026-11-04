@@ -47,6 +47,9 @@ export function Chart() {
 }
 ```
 
+The stylesheet is scoped to the chart's `.odontogram-root`; it does not apply
+page-wide resets or change the host document's `html` or `body` styles.
+
 The default chart view renders only the odontogram, without built-in tooth controls, a separate Tooth Information panel, or the periodontal-chart view. Current per-tooth chart state is printed as JSON in the browser console on initialization and when it changes. The available per-tooth settings catalog is shipped at `@moa1h/react-advanced-odontogram/tooth-settings.json`. `ToothControlsSurface` remains available as a named export for hosts that want to provide their own layout.
 
 ### Use the controls in another React app
