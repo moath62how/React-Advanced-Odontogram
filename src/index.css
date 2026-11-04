@@ -1,34 +1,12 @@
 
-:root{
+.odontogram-root{
   --primary: #1976D2;
-  --primary-hover: #1565C0;
-  --primary-light: #E3F2FD;
   --background: #FFFFFF;
-  --sidebar-background: #F5F5F5;
   --card-background: #FFFFFF;
-  --muted-background: #F9F9F9;
   --foreground: #0A0A0A;
-  --secondary-foreground: #39393B;
   --muted-foreground: #737373;
   --border: #E5E5E5;
-  --input-border: #E5E5E5;
-  --sidebar-active: #E3F2FD;
-  --sidebar-active-text: #1976D2;
-  --ring: #1976D2;
-  --radius: 0.75rem;
   --primary-rgb: 25,118,210;
-  --bg: var(--odon-bg, var(--background));
-  --panel: var(--odon-panel, var(--background));
-  --card: var(--odon-card, var(--card-background));
-  --muted: var(--odon-muted, var(--muted-foreground));
-  --text: var(--odon-text, var(--foreground));
-  --line: var(--odon-line, var(--border));
-  --accent: var(--odon-accent, var(--primary));
-  --accent2: var(--odon-accent2, var(--primary));
-}
-/* When themeConfig is applied via JS, --odon-* properties are set on .odontogram-root.
-   Re-resolve the shorthand variables so children pick up the overrides. */
-.odontogram-root{
   --bg: var(--odon-bg, var(--background));
   --panel: var(--odon-panel, var(--background));
   --card: var(--odon-card, var(--card-background));
@@ -48,13 +26,6 @@
   --line: var(--odon-line, #334155);
 }
 *{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-  background: radial-gradient(1200px 600px at 15% 0%, #ffffff 0%, var(--bg) 60%);
-  color:var(--text);
-}
 .topbar{
   display:flex; align-items:center; justify-content:space-between;
   padding:14px 18px;
