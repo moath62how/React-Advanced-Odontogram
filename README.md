@@ -5,7 +5,6 @@
 # 🦷 React Advanced Odontogram
 
 [![npm](https://img.shields.io/npm/v/@moa1h/react-advanced-odontogram?style=for-the-badge&logo=npm&color=CB3837)](https://www.npmjs.com/package/@moa1h/react-advanced-odontogram)
-[![Version](https://img.shields.io/badge/version-2.8.0-green?style=for-the-badge)](https://github.com/ZoliQua/React-Advanced-Odontogram/releases)
 [![License](https://img.shields.io/badge/license-MIT-orange?style=for-the-badge)](https://github.com/ZoliQua/React-Advanced-Odontogram/blob/main/LICENSE)
 [![DOI](https://raw.githubusercontent.com/ZoliQua/React-Advanced-Odontogram/main/src/assets/zenodo.21156787.svg)](https://doi.org/10.5281/zenodo.21156787)
 
@@ -170,6 +169,30 @@ Per-site probing depth, gingival margin, bleeding on probing (+ suppuration) at 
 Per-language guides are linked at the top of this file. Full API reference (TypeDoc):
 
 📚 **https://zoliqua.github.io/React-Advanced-Odontogram/**
+
+## 🚀 Publishing to npm (maintainers)
+
+From a clean working tree, with Node.js and npm installed:
+
+```bash
+npm ci
+npm test
+npm run build:lib
+npm pack --dry-run
+npm login
+npm whoami
+npm version patch
+npm publish
+git push origin main --follow-tags
+```
+
+Use `npm version minor` or `npm version major` instead of `patch` when
+appropriate. `npm version` updates `package.json` and `package-lock.json`, then
+creates a version commit and Git tag; it requires a clean working tree. Review
+the package contents from `npm pack --dry-run` before publishing. `npm publish`
+runs the `prepublishOnly` script, which builds the distributable library.
+Publishing is permanent for that version, so verify the version and package
+contents first. The package is scoped and configured for public access.
 
 ## 📄 License & citation
 
