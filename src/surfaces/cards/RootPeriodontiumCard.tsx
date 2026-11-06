@@ -9,7 +9,8 @@
 //
 //   #rpRootBlock: the merged pulp/endo optgroup select (`#pulpEndoSelect`, whose
 //     two `<optgroup>`s + Plan-mode standalone "none" mirror `buildPulpEndoSelect`
-//     exactly), the apical-diagnosis / periapical-lesion / root-resorption
+//     exactly), structured endodontic treatment/session/canal-measurement
+//     controls, the apical-diagnosis / periapical-lesion / root-resorption
 //     selects, and the resection + parapulpal-pin checkboxes.
 //   #rpPerioBlock: the mobility select, the still-imperative 6-site probing grid
 //     (`#perioGrid` + `#perioReadout` — the Tier 3 PR 3e CARVE-OUT, rendered as
@@ -35,11 +36,22 @@
 // its nearest `#rootPeriodontiumSection` ancestor, since the section element
 // itself is static (mirrors `CariesCard`/`FillingsCard`).
 
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef, type FormEvent } from "react";
 import { t } from "../../i18n/useI18n";
+import {
+  ENDODONTIC_FINAL_RESTORATIONS,
+  ENDODONTIC_OBTURATION_STATUSES,
+  ENDODONTIC_TREATMENT_STATUSES,
+  ENDODONTIC_TREATMENT_TYPES,
+  ENDODONTIC_MEASUREMENT_METHODS,
+  createDefaultEndodonticTreatment,
+} from "../../state/endodonticTreatment";
 import {
   getActiveRootPerio,
   setPulpEndoForSelection,
+  setEndodonticTreatmentForSelection,
+  addEndodonticCanalMeasurementForSelection,
+  addEndodonticTreatmentSessionForSelection,
   setApicalDxForSelection,
   setPeriapicalTypeForSelection,
   setResorptionForSelection,
@@ -55,6 +67,39 @@ import { useEngineState } from "../useEngineState";
 export default function RootPeriodontiumCard() {
   const rp = useEngineState(getActiveRootPerio);
   const rootRef = useRef<HTMLDivElement>(null);
+  const treatment = rp.endodonticTreatment ?? createDefaultEndodonticTreatment();
+  const treatmentDisabled = rp.activeTooth === null || rp.pulpEndoDisabled;
+
+  const updateTreatment = (patch: Partial<typeof treatment>) => {
+    setEndodonticTreatmentForSelection({ ...treatment, ...patch });
+  };
+
+  const addSession = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const sessionDate = String(new FormData(form).get("sessionDate") ?? "");
+    addEndodonticTreatmentSessionForSelection(sessionDate);
+    form.reset();
+  };
+
+  const addCanalMeasurement = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    const method = ENDODONTIC_MEASUREMENT_METHODS.find((value) => value === data.get("measurementMethod")) ?? "other";
+    addEndodonticCanalMeasurementForSelection({
+      canalName: String(data.get("canalName") ?? ""),
+      rootName: String(data.get("rootName") ?? ""),
+      workingLengthMm: Number(data.get("workingLengthMm")),
+      referencePoint: String(data.get("referencePoint") ?? ""),
+      measurementMethod: method,
+      finalFileSize: String(data.get("finalFileSize") ?? ""),
+      taper: String(data.get("taper") ?? ""),
+      obturationMaterial: String(data.get("obturationMaterial") ?? ""),
+      notes: String(data.get("canalNotes") ?? ""),
+    });
+    form.reset();
+  };
 
   // The #rootPeriodontiumSection visibility gate lived on the section element in
   // the imperative sync; the section stays static (shared collapse infra), so
@@ -90,6 +135,181 @@ export default function RootPeriodontiumCard() {
             ))}
           </select>
         </div>
+        <fieldset className="endo-treatment-group" disabled={treatmentDisabled}>
+          <legend>{t("endoTreatment.title")}</legend>
+          <div className="row">
+            <label htmlFor="endodonticTreatmentStatus">{t("endoTreatment.status")}</label>
+            <select
+              id="endodonticTreatmentStatus"
+              value={treatment.treatmentStatus}
+              onChange={(event) => {
+                const value = ENDODONTIC_TREATMENT_STATUSES.find((candidate) => candidate === event.target.value);
+                if (value) updateTreatment({ treatmentStatus: value });
+              }}
+            >
+              {ENDODONTIC_TREATMENT_STATUSES.map((value) => (
+                <option key={value} value={value}>{t(`endoTreatment.status.${value}`)}</option>
+              ))}
+            </select>
+          </div>
+          <div className="row">
+            <label htmlFor="endodonticTreatmentType">{t("endoTreatment.type")}</label>
+            <select
+              id="endodonticTreatmentType"
+              value={treatment.treatmentType}
+              onChange={(event) => {
+                const value = ENDODONTIC_TREATMENT_TYPES.find((candidate) => candidate === event.target.value);
+                if (value) updateTreatment({ treatmentType: value });
+              }}
+            >
+              {ENDODONTIC_TREATMENT_TYPES.map((value) => (
+                <option key={value} value={value}>{t(`endoTreatment.type.${value}`)}</option>
+              ))}
+            </select>
+          </div>
+          <div className="row">
+            <label htmlFor="endodonticObturationStatus">{t("endoTreatment.obturation")}</label>
+            <select
+              id="endodonticObturationStatus"
+              value={treatment.obturationStatus}
+              onChange={(event) => {
+                const value = ENDODONTIC_OBTURATION_STATUSES.find((candidate) => candidate === event.target.value);
+                if (value) updateTreatment({ obturationStatus: value });
+              }}
+            >
+              {ENDODONTIC_OBTURATION_STATUSES.map((value) => (
+                <option key={value} value={value}>{t(`endoTreatment.obturation.${value}`)}</option>
+              ))}
+            </select>
+          </div>
+          <div className="row">
+            <label htmlFor="endodonticFinalRestoration">{t("endoTreatment.finalRestoration")}</label>
+            <select
+              id="endodonticFinalRestoration"
+              value={treatment.finalRestoration}
+              onChange={(event) => {
+                const value = ENDODONTIC_FINAL_RESTORATIONS.find((candidate) => candidate === event.target.value);
+                if (value) updateTreatment({ finalRestoration: value });
+              }}
+            >
+              {ENDODONTIC_FINAL_RESTORATIONS.map((value) => (
+                <option key={value} value={value}>{t(`endoTreatment.restoration.${value}`)}</option>
+              ))}
+            </select>
+          </div>
+          <label className="endo-treatment-notes">
+            <span>{t("endoTreatment.notes")}</span>
+            <textarea
+              value={treatment.notes}
+              rows={2}
+              onChange={(event) => updateTreatment({ notes: event.target.value })}
+            />
+          </label>
+
+          <div className="endo-treatment-subtitle">{t("endoTreatment.sessions")}</div>
+          <form className="endo-treatment-entry" onSubmit={addSession}>
+            <label>
+              <span>{t("endoTreatment.sessionDate")}</span>
+              <input name="sessionDate" type="date" required />
+            </label>
+            <button type="submit" className="btn btn-ghost btn-sm">{t("endoTreatment.addSession")}</button>
+          </form>
+          {treatment.sessions.length > 0 && (
+            <ul className="endo-treatment-list">
+              {treatment.sessions.map((session, index) => (
+                <li key={`${session}-${index}`}>
+                  <span>{session}</span>
+                  <button
+                    type="button"
+                    className="btn btn-ghost btn-sm"
+                    aria-label={t("endoTreatment.removeSession", { date: session })}
+                    onClick={() => updateTreatment({ sessions: treatment.sessions.filter((_, i) => i !== index) })}
+                  >
+                    {t("case.diagnoses.remove")}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          <div className="endo-treatment-subtitle">{t("endoTreatment.canalMeasurements")}</div>
+          <form className="endo-treatment-entry" onSubmit={addCanalMeasurement}>
+            <label>
+              <span>{t("endoTreatment.canalName")}</span>
+              <input name="canalName" required />
+            </label>
+            <label>
+              <span>{t("endoTreatment.rootName")}</span>
+              <input name="rootName" required />
+            </label>
+            <label>
+              <span>{t("endoTreatment.workingLength")}</span>
+              <input name="workingLengthMm" type="number" min="0.1" step="0.1" required />
+            </label>
+            <label>
+              <span>{t("endoTreatment.referencePoint")}</span>
+              <input name="referencePoint" />
+            </label>
+            <label>
+              <span>{t("endoTreatment.measurementMethod")}</span>
+              <select name="measurementMethod" defaultValue="combined">
+                {ENDODONTIC_MEASUREMENT_METHODS.map((value) => (
+                  <option key={value} value={value}>{t(`endoTreatment.measurement.${value}`)}</option>
+                ))}
+              </select>
+            </label>
+            <label>
+              <span>{t("endoTreatment.finalFileSize")}</span>
+              <input name="finalFileSize" />
+            </label>
+            <label>
+              <span>{t("endoTreatment.taper")}</span>
+              <input name="taper" />
+            </label>
+            <label>
+              <span>{t("endoTreatment.obturationMaterial")}</span>
+              <input name="obturationMaterial" />
+            </label>
+            <label>
+              <span>{t("endoTreatment.canalNotes")}</span>
+              <input name="canalNotes" />
+            </label>
+            <button type="submit" className="btn btn-ghost btn-sm">{t("endoTreatment.saveMeasurement")}</button>
+          </form>
+          {treatment.canals.length > 0 && (
+            <ul className="endo-treatment-list">
+              {treatment.canals.map((canal) => (
+                <li key={`${canal.rootName}-${canal.canalName}`}>
+                  <span>
+                    <strong>{canal.rootName} / {canal.canalName}</strong>
+                    {canal.workingLengthMm !== null && ` - ${canal.workingLengthMm} mm`}
+                    {canal.measurementMethod && ` (${t(`endoTreatment.measurement.${canal.measurementMethod}`)})`}
+                  </span>
+                  <details>
+                    <summary>{t("endoTreatment.measurementDetails")}</summary>
+                    <dl>
+                      <dt>{t("endoTreatment.referencePoint")}</dt><dd>{canal.referencePoint || "—"}</dd>
+                      <dt>{t("endoTreatment.finalFileSize")}</dt><dd>{canal.finalFileSize || "—"}</dd>
+                      <dt>{t("endoTreatment.taper")}</dt><dd>{canal.taper || "—"}</dd>
+                      <dt>{t("endoTreatment.obturationMaterial")}</dt><dd>{canal.obturationMaterial || "—"}</dd>
+                      <dt>{t("endoTreatment.canalNotes")}</dt><dd>{canal.notes || "—"}</dd>
+                    </dl>
+                  </details>
+                  <button
+                    type="button"
+                    className="btn btn-ghost btn-sm"
+                    aria-label={t("endoTreatment.removeCanal", { root: canal.rootName, canal: canal.canalName })}
+                    onClick={() => updateTreatment({
+                      canals: treatment.canals.filter((entry) => entry !== canal),
+                    })}
+                  >
+                    {t("case.diagnoses.remove")}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </fieldset>
         <div id="apicalDxRow" className={rp.apicalDxRowVisible ? "row" : "row hidden"}>
           <span>{t("apical.dxLabel")}</span>
           <select

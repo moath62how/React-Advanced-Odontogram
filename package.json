@@ -34,6 +34,7 @@
   "files": [
     "dist",
     "tooth-settings.json",
+    "tooth-charting-guide.json",
     "THIRD-PARTY-NOTICES.md"
   ],
   "main": "./dist/odontogram.js",
@@ -49,6 +50,7 @@
       "import": "./dist/odontogram.js"
     },
     "./tooth-settings.json": "./tooth-settings.json",
+    "./tooth-charting-guide.json": "./tooth-charting-guide.json",
     "./style.css": "./dist/style.css"
   },
   "engines": {

@@ -591,6 +591,23 @@ select:focus{
 .card-subtitle{font-weight:700; margin:6px 0}
 .hint{font-size:12px;color:var(--muted); margin:6px 0 10px}
 .row{display:flex; gap:10px; align-items:center; font-size:13px; padding:6px 2px}
+.endo-treatment-group{min-width:0; margin:10px 0; padding:10px; border:1px solid var(--line); border-radius:12px}
+.endo-treatment-group legend{padding:0 6px; font-size:13px; font-weight:700}
+.endo-treatment-group .row{display:grid; grid-template-columns:minmax(110px,1fr) minmax(0,1.4fr)}
+.endo-treatment-group select,.endo-treatment-group input,.endo-treatment-group textarea{min-width:0; width:100%}
+.endo-treatment-notes,.endo-treatment-entry label{display:flex; flex-direction:column; gap:4px; min-width:0; margin:8px 0; font-size:12px}
+.endo-treatment-notes textarea{resize:vertical; border:1px solid var(--line); border-radius:8px; padding:8px; background:var(--panel); color:var(--text); font:inherit}
+.endo-treatment-subtitle{margin:12px 0 4px; font-size:12px; font-weight:700}
+.endo-treatment-entry{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:4px 8px; align-items:end}
+.endo-treatment-entry button{justify-self:start; margin:4px 0}
+.endo-treatment-list{display:flex; flex-direction:column; gap:6px; margin:8px 0 0; padding:0; list-style:none}
+.endo-treatment-list li{display:flex; align-items:center; justify-content:space-between; gap:8px; min-width:0; font-size:12px}
+.endo-treatment-list li>span{min-width:0; overflow-wrap:anywhere}
+.endo-treatment-list details{font-size:11px}
+.endo-treatment-list dl{display:grid; grid-template-columns:auto 1fr; gap:2px 6px; margin:4px 0}
+.endo-treatment-list dt{font-weight:600}
+.endo-treatment-list dd{margin:0; overflow-wrap:anywhere}
+@media(max-width:420px){.endo-treatment-entry{grid-template-columns:1fr}}
 .contact-row{margin-bottom:6px}
 .bruxism-row{margin-top:6px; gap:8px}
 .wear-stack{ display:flex; flex-direction:column; gap:6px; }

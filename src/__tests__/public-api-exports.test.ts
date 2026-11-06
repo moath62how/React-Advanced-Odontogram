@@ -16,6 +16,9 @@ import {
   closePerioOverlay,
   isPerioOverlayOpen,
   hasAnyPerioData,
+  setEndodonticTreatmentForSelection,
+  addEndodonticCanalMeasurementForSelection,
+  addEndodonticTreatmentSessionForSelection,
   exportStatus,
   importStatus,
   exportPdf,
@@ -79,6 +82,12 @@ describe("public API exports — App.tsx re-exports", () => {
   it("exports perio data presence check", () => {
     expect(hasAnyPerioData).toBeDefined();
     expect(typeof hasAnyPerioData).toBe("function");
+  });
+
+  it("exports structured endodontic treatment setters", () => {
+    expect(typeof setEndodonticTreatmentForSelection).toBe("function");
+    expect(typeof addEndodonticCanalMeasurementForSelection).toBe("function");
+    expect(typeof addEndodonticTreatmentSessionForSelection).toBe("function");
   });
 
   it("exports JSON import/export functions", () => {

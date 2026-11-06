@@ -13,6 +13,21 @@ import { comparePerioExams, type PerioExamComparison } from "./state/examCompare
 import { parseFhirBundle } from "./fhir/fromFhir";
 import type { FhirExportOptions, OdontogramExportPayload } from "./fhir/types";
 import { resolveCodingPack } from "./dx/packs";
+import {
+  createDefaultEndodonticTreatment,
+  normalizeEndodonticTreatment,
+  type EndodonticCanalMeasurement,
+  type EndodonticTreatment,
+} from "./state/endodonticTreatment";
+export type {
+  EndodonticCanalMeasurement,
+  EndodonticFinalRestoration,
+  EndodonticMeasurementMethod,
+  EndodonticObturationStatus,
+  EndodonticTreatment,
+  EndodonticTreatmentStatus,
+  EndodonticTreatmentType,
+} from "./state/endodonticTreatment";
 import { DX_CODES, type DiagnosisKey } from "./dx/codes";
 import { deriveDentalDiagnoses, isNaturalPresent } from "./dx/derive";
 import { refineWho } from "./dx/refine";
@@ -2112,6 +2127,8 @@ export type ActiveRootPerioMod = {
 };
 
 export type ActiveRootPerio = {
+  activeTooth: number | null;
+  endodonticTreatment: EndodonticTreatment | null;
   // Section + sub-block visibility (reconciled hide predicates).
   sectionVisible: boolean;
   rootBlockVisible: boolean;
@@ -2253,6 +2270,8 @@ export function getActiveRootPerio(): ActiveRootPerio {
   });
 
   return {
+    activeTooth,
+    endodonticTreatment: normalizeEndodonticTreatment(state.endodonticTreatment),
     // The section collapses only when BOTH blocks would be gone; the root block
     // stays visible in Plan so endo TREATMENT remains plannable.
     sectionVisible: !(hideByBase && (hideByNone || isPlan)),
@@ -2299,6 +2318,54 @@ export function getActiveRootPerio(): ActiveRootPerio {
  *  mutual-exclusion normalization). */
 export function setPulpEndoForSelection(value: string): void {
   applyToSelected((s: Any)=>{ pulpEndoOnSelect(s, value); });
+}
+
+/** Replace the structured endodontic treatment record on the current selection. */
+export function setEndodonticTreatmentForSelection(value: EndodonticTreatment | null): void {
+  const treatment = normalizeEndodonticTreatment(value);
+  applyToSelected((s: Any) => {
+    s.endodonticTreatment = treatment
+      ? normalizeEndodonticTreatment(treatment)
+      : null;
+  });
+}
+
+/** Add or update a canal's working-length and obturation measurements. */
+export function addEndodonticCanalMeasurementForSelection(
+  measurement: EndodonticCanalMeasurement,
+): void {
+  const canalName = measurement.canalName.trim();
+  const rootName = measurement.rootName.trim();
+  if (!canalName || !rootName
+      || typeof measurement.workingLengthMm !== "number"
+      || !Number.isFinite(measurement.workingLengthMm)
+      || measurement.workingLengthMm <= 0) {
+    throw new TypeError("A canal name, root name, and positive working length are required.");
+  }
+  applyToSelected((s: Any) => {
+    const treatment = normalizeEndodonticTreatment(s.endodonticTreatment)
+      ?? createDefaultEndodonticTreatment();
+    const index = treatment.canals.findIndex((canal) =>
+      canal.canalName.toLocaleLowerCase() === canalName.toLocaleLowerCase()
+      && canal.rootName.toLocaleLowerCase() === rootName.toLocaleLowerCase()
+    );
+    const nextMeasurement = { ...measurement, canalName, rootName };
+    if (index < 0) treatment.canals.push(nextMeasurement);
+    else treatment.canals[index] = nextMeasurement;
+    s.endodonticTreatment = treatment;
+  });
+}
+
+/** Record a treatment-session date on the current selection. */
+export function addEndodonticTreatmentSessionForSelection(session: string): void {
+  const sessionDate = session.trim();
+  if (!sessionDate) throw new TypeError("A treatment session date is required.");
+  applyToSelected((s: Any) => {
+    const treatment = normalizeEndodonticTreatment(s.endodonticTreatment)
+      ?? createDefaultEndodonticTreatment();
+    if (!treatment.sessions.includes(sessionDate)) treatment.sessions.push(sessionDate);
+    s.endodonticTreatment = treatment;
+  });
 }
 
 /** Apical (AAE) diagnosis on the current selection — clears the periapical

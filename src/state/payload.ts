@@ -21,6 +21,7 @@
 import { DX_CODES } from "../dx/codes";
 import { validValues, validSurfaces } from "../registry/validate";
 import { isValidRestoration, RESTORATION_MATRIX, type RestorationType, type RestorationMaterial } from "../registry/restorations";
+import { normalizeEndodonticTreatment } from "./endodonticTreatment";
 
 // The live per-tooth state is a plain object mixing Sets, Maps and scalars —
 // untyped on purpose; `odontogram.ts` documents why at its own `Any` alias, and
@@ -55,6 +56,7 @@ export function defaultState(){
     mods: new Set(),
     periapicalType: "none", // none | granuloma | cyst | abscess (qualifies mods "inflammation")
     endo: "none", // none | endo-medical-filling | endo-filling | endo-glass-pin | endo-metal-pin
+    endodonticTreatment: null,
     caries: new Set(),
     cariesActiveDepth: 2, // canonical ICDAS code (2 = superficial representative)
     // The single unified per-surface caries severity (0..6). Read as ICDAS on a
@@ -194,6 +196,9 @@ export function serializeState(s: Any){
     mods: Array.from(s.mods || []),
     periapicalType: s.periapicalType,
     endo: s.endo,
+    ...(s.endodonticTreatment
+      ? { endodonticTreatment: normalizeEndodonticTreatment(s.endodonticTreatment) }
+      : {}),
     caries: Array.from(s.caries || []),
     cariesActiveDepth: s.cariesActiveDepth,
     // The unified per-surface severity, serialized as Record<surface,number>.
@@ -546,6 +551,7 @@ export function hydrateState(raw: Any, inferLegacySecondaryCaries = true){
     }
   }
   s.endo = validateEnum(raw.endo, VALID_ENDO, s.endo);
+  s.endodonticTreatment = normalizeEndodonticTreatment(raw.endodonticTreatment);
   // Enforce the endo/pulp mutual-exclusion invariant on read. A tooth with
   // any endodontic treatment (endo !== "none") has no vital pulp, so it cannot
   // carry a pulpitis/necrosis diagnosis. Normalize to "normal" (also clears any

@@ -52,6 +52,52 @@
       "type": "object",
       "fields": ["endo", "pulpDx", "pulpLatin", "apicalDx", "periapicalType", "resorptionType", "endoResection"]
     },
+    "endodonticTreatment": {
+      "type": "object",
+      "fields": [
+        "treatmentStatus",
+        "treatmentType",
+        "sessions",
+        "canals",
+        "obturationStatus",
+        "finalRestoration",
+        "notes"
+      ],
+      "treatmentStatus": {
+        "type": "enum",
+        "options": ["planned", "in-progress", "completed", "interrupted"]
+      },
+      "treatmentType": {
+        "type": "enum",
+        "options": ["initial-root-canal", "retreatment"]
+      },
+      "canals": {
+        "type": "array",
+        "itemFields": [
+          "canalName",
+          "rootName",
+          "workingLengthMm",
+          "referencePoint",
+          "measurementMethod",
+          "finalFileSize",
+          "taper",
+          "obturationMaterial",
+          "notes"
+        ],
+        "measurementMethod": {
+          "type": "enum",
+          "options": ["apex-locator", "radiograph", "combined", "other"]
+        }
+      },
+      "obturationStatus": {
+        "type": "enum",
+        "options": ["not-started", "partially-completed", "completed"]
+      },
+      "finalRestoration": {
+        "type": "enum",
+        "options": ["pending", "temporary", "permanent-filling", "crown", "other"]
+      }
+    },
     "orthodontics": {
       "type": "object",
       "fields": ["orthoAppliance", "orthoDrift", "orthoVertical", "orthoRotation"]

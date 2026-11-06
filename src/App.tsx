@@ -84,6 +84,9 @@ export {
   openFillingDefectPopup,
   getActiveRootPerio,
   setPulpEndoForSelection,
+  setEndodonticTreatmentForSelection,
+  addEndodonticCanalMeasurementForSelection,
+  addEndodonticTreatmentSessionForSelection,
   setApicalDxForSelection,
   setPeriapicalTypeForSelection,
   setResorptionForSelection,
@@ -122,7 +125,7 @@ export {
   addDiagnosisToSelection,
   removeDiagnosisFromSelection,
 } from "./odontogram";
-export type { ActiveOrtho, ActiveCaries, ActiveCariesSurface, ActiveFillings, ActiveFillingSurface, ActiveRootPerio, ActiveRootPerioMod, RootPerioOption, RootPerioOptGroup, ActiveToothDetails, ToothDetailsOption, ExtractionPlanParent, ToothDiagnosis, ActiveDiagnoses, ActiveDiagnosisRow } from "./odontogram";
+export type { ActiveOrtho, ActiveCaries, ActiveCariesSurface, ActiveFillings, ActiveFillingSurface, ActiveRootPerio, ActiveRootPerioMod, RootPerioOption, RootPerioOptGroup, ActiveToothDetails, ToothDetailsOption, ExtractionPlanParent, ToothDiagnosis, ActiveDiagnoses, ActiveDiagnosisRow, EndodonticCanalMeasurement, EndodonticFinalRestoration, EndodonticMeasurementMethod, EndodonticObturationStatus, EndodonticTreatment, EndodonticTreatmentStatus, EndodonticTreatmentType } from "./odontogram";
 export type { SurfaceCell, SurfaceIndicator } from "./surfaces/cards/SurfaceCross";
 
 /**

@@ -1,0 +1,124 @@
+{
+  "schemaVersion": "1.0.0",
+  "description": "Reference for recording diagnoses and proposed treatment on individual teeth with React Advanced Odontogram.",
+  "optionsReference": "./tooth-settings.json",
+  "selection": {
+    "description": "Selection-based functions apply to every tooth currently selected in the chart.",
+    "getSelectedTeethFunction": "getSelectedTeeth"
+  },
+  "diagnoses": {
+    "description": "Most diagnoses are derived from clinical tooth findings. Do not write diagnoses directly into a tooth record; use the chart functions so the finding, drawing, and exported diagnosis stay in sync.",
+    "addFunction": "addDiagnosisToSelection",
+    "removeFunction": "removeDiagnosisFromSelection",
+    "overrideFunction": "setDxOverrideForSelection",
+    "overrideModes": ["add", "suppress", null],
+    "toothDiagnosisKeys": [
+      "caries",
+      "cariesCementum",
+      "cariesArrested",
+      "pulpitis",
+      "pulpNecrosis",
+      "apicalPeriodontitisAcute",
+      "apicalPeriodontitisChronic",
+      "radicularCyst",
+      "periapicalAbscess",
+      "periapicalAbscessSinus",
+      "condensingOsteitis",
+      "resorption",
+      "attrition",
+      "abrasion",
+      "erosion",
+      "abfraction",
+      "calculus",
+      "fluorosis",
+      "tetracyclineStain",
+      "postEruptiveColour",
+      "toothLoss",
+      "retainedRoot",
+      "toothFracture"
+    ],
+    "addFunctionSupportedKeys": "All toothDiagnosisKeys except caries. Caries must be recorded on a surface with setCariesSurfaceForSelection.",
+    "clinicalFindingFunctions": {
+      "caries": ["setCariesSurfaceForSelection", "setCariesActiveDepthForSelection"],
+      "rootCaries": ["setRootCariesForSelection"],
+      "pulpAndEndodontics": ["setPulpEndoForSelection"],
+      "apicalDiagnosis": ["setApicalDxForSelection", "setPeriapicalTypeForSelection"],
+      "resorption": ["setResorptionForSelection"],
+      "toothWear": ["setWearEdgeForSelection", "setWearCervicalForSelection"],
+      "discoloration": ["setDiscolorationForSelection"],
+      "calculus": ["setCalculusForSelection"],
+      "toothFracture": [
+        "setBrokenMesialForSelection",
+        "setBrokenIncisalForSelection",
+        "setBrokenDistalForSelection"
+      ],
+      "toothStatus": ["setToothSelectionForSelection", "setSubstrateForSelection"]
+    },
+    "important": [
+      "Diagnosis keys are identifiers, not display labels; use getToothDiagnoses or the diagnosis catalog for labels and codes.",
+      "Periodontitis and gingivitis are periodontal diagnoses, not toothDiagnosisKeys.",
+      "Peri-implant diagnoses are recorded on an implant using setPeriImplantForSelection."
+    ]
+  },
+  "treatmentPlan": {
+    "description": "The treatment plan is a separate chart, not a separate set of tooth fields. Switch to Plan mode before calling the same selection-based setters; the first visit to Plan starts as a copy of Status.",
+    "statusModeFunction": "setChartMode",
+    "planModeValue": "plan",
+    "statusModeValue": "status",
+    "getPlanChangesFunction": "getPlanChanges",
+    "getPlanChartFunction": "getPlanChart",
+    "setPlanChartFunction": "setPlanChart",
+    "procedureFields": {
+      "toothAndExtraction": [
+        "toothSelection",
+        "toothSubstrate",
+        "extractionPlan",
+        "missingClosed"
+      ],
+      "restorative": [
+        "caries",
+        "cariesSeverity",
+        "rootCaries",
+        "fillingSurfaceMaterials",
+        "fissureSealing",
+        "restorationType",
+        "restorationMaterial",
+        "crownNeeded",
+        "crownReplace",
+        "crownLeakage",
+        "bridgePillar",
+        "parapulpalPin"
+      ],
+      "endodonticAndApical": [
+        "endo",
+        "endoResection",
+        "pulpDx",
+        "apicalDx",
+        "periapicalType",
+        "resorptionType"
+      ],
+      "orthodontic": [
+        "orthoAppliance",
+        "orthoDrift",
+        "orthoVertical",
+        "orthoRotation"
+      ],
+      "prosthetic": [
+        "prosthesis",
+        "restorationType",
+        "restorationMaterial"
+      ]
+    },
+    "example": [
+      "setChartMode(\"plan\")",
+      "setRestorationForSelection(\"crown|zircon\")",
+      "getPlanChanges()",
+      "setChartMode(\"status\")"
+    ],
+    "important": [
+      "The Plan chart uses the same tooth fields and option values as Status; see tooth-settings.json.",
+      "Selection-based setters update the active chart only.",
+      "Plan tooth-selection choices are limited to none, tooth-base, and implant, except an existing tooth value remains available."
+    ]
+  }
+}
